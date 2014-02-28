@@ -1,6 +1,7 @@
 module.exports = (grunt) ->
   # load plugins that provides tasks  
   grunt.loadNpmTasks 'grunt-contrib-coffee'
+  grunt.loadNpmTasks 'grunt-contrib-stylus'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-este'
 
@@ -21,6 +22,13 @@ module.exports = (grunt) ->
           ]
           ext: '.js'
         }]
+
+    stylus:
+      options:
+        compile: true
+      app:
+        files:
+          'public/styles/index.css': 'public/styles/index.styl'
 
     esteDeps:
       all:
@@ -43,3 +51,7 @@ module.exports = (grunt) ->
         tasks: ['coffee:app']
         options:
           livereload: true
+
+      stylus:
+        files: 'public/styles/**/*.styl'
+        tasks: ['stylus:app']

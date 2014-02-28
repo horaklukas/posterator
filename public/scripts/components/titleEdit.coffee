@@ -8,6 +8,12 @@ app.comps.fonts =
 	'verd': 'Verdana'
 
 app.comps.TitleEdit = este.react.create (`/** */`)
+	onFocusChange: (ev) ->
+		showEditForm = ev?.type is 'focus'
+		
+		@setState 'editing': showEditForm
+		@props['editModeChange'](showEditForm)
+
 	onFontChange: ->
 		@setState {
 			'font': app.comps.fonts[@refs['font'].getDOMNode().value]
@@ -20,14 +26,14 @@ app.comps.TitleEdit = este.react.create (`/** */`)
 		selectedFont = null
 		
 		fontsList = (for id, font of app.comps.fonts
-			selectedFont = id if @props['font'] is font
+			selectedFont = id if @state['font'] is font
 			@option {'value': id }, font 
 		)
 
-		@div {'style': {'backgroundColor': '#ccc'}}, [
+		@div {'className': 'fontForm'}, [
 			@label 'Size'
 			@input({
-				'type': 'number',	'min': 2, 'max': 100,  'defaultValue': @props['size']
+				'type': 'number',	'min': 2, 'max': 100,  'defaultValue': @state['size']
 				'ref': 'size',	'onChange': @onFontChange
 			})
 			@br()
@@ -37,12 +43,12 @@ app.comps.TitleEdit = este.react.create (`/** */`)
 			@br()
 			@label 'Bold'
 			@input {
-				'type': 'checkbox', 'ref': 'bold', 'defaultChecked': @props['bold']
+				'type': 'checkbox', 'ref': 'bold', 'defaultChecked': @state['bold']
 				'onChange': @onFontChange
 			}
 			@label 'Italic'
 			@input {
-				'type': 'checkbox', 'ref': 'italic','defaultChecked': @props['italic']
+				'type': 'checkbox', 'ref': 'italic','defaultChecked': @state['italic']
 				'onChange': @onFontChange
 			}
 		]
@@ -51,13 +57,22 @@ app.comps.TitleEdit = este.react.create (`/** */`)
 		'top': 0, 'left': 0, 'width': 100, 'height': 100, 'text': ''
 
 	getInitialState: ->
-		'size': 10, 'font': 'Arial', 'bold': false, 'italic': false
-
+		state = 
+			'size': @props['size'] ? 10
+			'font': @props['font'] ? 'Arial'
+			'bold': @props['bold'] ? false
+			'italic': @props['italic'] ? false
+			'editing': false
+		
 	render: ->
-		containerStyles =
-			'position': 'absolute'
-			'top': @props['top']
-			'left': @props['left']
+		containerProps =
+			'style':
+				'position': 'absolute'
+				'top': @props['top']
+				'left': @props['left']
+			'className': 'titleEdit'
+
+		if @state['editing'] then containerProps.className += ' editing'
 
 		inputStyles =
 			'fontSize': @state['size']
@@ -66,10 +81,12 @@ app.comps.TitleEdit = este.react.create (`/** */`)
 			'fontStyle': if @state['italic'] then 'italic' else 'normal' 
 			'width': @props['width']
 			'height': @props['height']
-			'backgroundColor': 'transparent'
-			'border': '1px solid black'
 
-		@div {'style': containerStyles}, [
-			@input 'type': 'text', style: inputStyles, 'defaultValue': @props['text']
+		@div containerProps, [
+			@input { 
+				'type': 'text', style: inputStyles, 'defaultValue': @props['text']
+				'className': 'title', 'onFocus': @onFocusChange
+			}
 			@createEditForm()
+			@button {'onClick': @onFocusChange, 'className': 'confirm'}, 'OK'
 		]
