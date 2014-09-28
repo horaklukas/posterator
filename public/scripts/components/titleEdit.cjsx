@@ -1,3 +1,5 @@
+React = require 'react'
+
 appfonts = 
 	'arial': 'Arial'
 	'tnr': 'Times New Roman'
@@ -31,7 +33,7 @@ module.exports = React.createClass
 			</select>
 			<br />
 			<label>Bold</label>
-			<input type='checkbox' ref='bold' defaultChecked={@porps.bold}
+			<input type='checkbox' ref='bold' defaultChecked={@props.bold}
 				onChange={@onFontChange} />
 			<label>Italic</label>
 			<input type='checkbox' ref='italic' defaultChecked={@props.italic}
@@ -61,6 +63,6 @@ module.exports = React.createClass
 			border: '1px solid black'
 
 		<div style={containerStyles}>
-			<input type='text' style={inputStyles} defaultValue={@props.text}
+			<input type='text' style={inputStyles} defaultValue={@props.text} />
 			{@createEditForm()}
 		</div>
