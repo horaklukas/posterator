@@ -1,18 +1,39 @@
 React = require 'react'
+Fluxxor = require 'fluxxor'
+FluxMixin = Fluxxor.FluxMixin React
+StoreWatchMixin = Fluxxor.StoreWatchMixin
 TitleEdit = require './titleEdit'
 
+
 module.exports = React.createClass
-	getDefaultProps: ->
-		width: 800, height: 600, url: ''
+	mixins: [
+		FluxMixin
+		StoreWatchMixin('TitlesStore')
+	]
+
+	createTitle: (title, i) ->
+		<TitleEdit
+			top={title.y} left={title.x} 
+			width={title.w} height={title.h} 
+			text={title.text} 
+			size={title.size} 
+			font={title.font}
+			bold={title.bold}
+			italic={title.italic}
+			key={i} />
+
+	getStateFromFlux: ->
+		flux = @getFlux()
+
+		poster: flux.store('PostersStore').getPoster()
+		titles: flux.store('TitlesStore').getTitles()
 
 	render: ->
 		styles =
-			width: @props.width
-			height: @props.height
-			backgroundImage: "url(#{@props.url})"
+			width: @state.poster.w
+			height: @state.poster.h
+			backgroundImage: "url(#{@state.poster.url})"
 
 		<div style={styles}>
-			<TitleEdit top={170} left={150} width={300} height={100} text={'Krkanka'} size={20} font={'Verdana'} />
-			<TitleEdit top={400} left={160} width={400} height={65} text={''}
-				size={10} font={'Verdana'} />
+			{@state.titles.map @createTitle}
 		</div>

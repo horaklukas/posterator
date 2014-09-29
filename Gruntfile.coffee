@@ -19,7 +19,7 @@ module.exports = (grunt) ->
         files: [{
           expand: true,
           src: [
-            './**/*.coffee'
+            './public/scripts/**/*.coffee'
             '!node_modules/'
           ]
           ext: '.js'
@@ -42,7 +42,7 @@ module.exports = (grunt) ->
 
     watch:
       coffee:
-        files: '<%= coffee.app.files[0].src %>' #'public/scripts/**/*.coffee' #
+        files: './public/scripts/**/*.coffee' # '<%= coffee.app.files[0].src %>' 
         tasks: ['coffee:app']
 
       cjsx:
@@ -52,4 +52,5 @@ module.exports = (grunt) ->
       browserify:
         files: ['public/scripts/**/*.js','!public/scripts/bundle.js']
         tasks: ['browserify']
-        livereload: true
+        options:
+          livereload: true

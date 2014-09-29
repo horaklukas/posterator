@@ -1,5 +1,5 @@
 {
-  "name": "images",
+  "name": "posterator",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
@@ -11,7 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "canvas": "~1.1.3",
-    "flux": "^1.0.2",
+    "fluxxor": "^1.4.1",
     "react": "^0.11.1"
   },
   "devDependencies": {
