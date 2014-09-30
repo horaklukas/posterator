@@ -2,7 +2,7 @@
 
 React = require 'react'
 Fluxxor = require 'fluxxor'
-Canvas = require './components/canvas'
+App = require './components/app'
 actions = require './actions'
 TitlesStore = require './stores/titles-store'
 PostersStore = require './stores/posters-store'
@@ -19,6 +19,6 @@ stores =
 flux = new Fluxxor.Flux stores, actions
 
 React.renderComponent(
-	<Canvas flux={flux} />
+	<App flux={flux} />
 	document.getElementById 'posteratorApp'
 )
