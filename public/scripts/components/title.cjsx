@@ -1,6 +1,7 @@
 React = require 'react'
 Fluxxor = require 'fluxxor'
 FluxChildMixin = Fluxxor.FluxChildMixin React
+TitleToolbar = require './title-toolbar'
 
 appfonts = 
   'arial': 'Arial'
@@ -10,50 +11,11 @@ appfonts =
 module.exports = Title = React.createClass
   mixins: [FluxChildMixin]
 
-  onSizeChange: ({target}) ->
-    @onFontChange 'size', Number target.value
-
-  onFontFamilyChange: ({target}) ->
-    @onFontChange 'font', target.value
-
-  onBoldChange: ({target}) ->
-    @onFontChange 'bold', target.checked
-
-  onItalicChange: ({target}) ->
-    @onFontChange 'italic', target.checked
-
-  onFontChange: (property, value) ->
-    @getFlux().actions.titles.changeFont @props.key, property, value
-
   onTextChange: ({target}) ->
     @getFlux().actions.titles.changeText @props.key, target.value
 
   onActivateEditMode: (e) ->
     @setState editing: true
-
-  createEditForm: ->
-    selectedFont = null
-    
-    fontsList = (for id, font of appfonts
-      selectedFont = id if @props['font'] is font
-      <option value={id}>{font}</option> 
-    )
-
-    <div>
-      <div style={{'backgroundColor': '#ccc'}} >
-        <label>Size</label>
-        <input type='number' min={2} max={100} value={@props.size} 
-          onChange={@onSizeChange} />
-        <label>Font family</label>
-        <select value={selectedFont} onChange={@onFontFamilyChange}>
-          {fontsList}
-        </select>
-        <label>Bold</label>
-        <input type='checkbox' checked={@props.bold} onChange={@onBoldChange} />
-        <label>Italic</label>
-        <input type='checkbox' checked={@props.italic} onChange={@onItalicChange} />
-      </div>
-    </div>
 
   getInitialState: ->
     editing: false
@@ -66,7 +28,7 @@ module.exports = Title = React.createClass
 
     inputStyles =
       fontSize: @props.size
-      fontFamily: @props.font
+      fontFamily: appfonts[@props.font]
       fontWeight: if @props.bold then 'bold' else 'normal'
       fontStyle: if @props.italic then 'italic' else 'normal' 
       width: @props.width
@@ -77,7 +39,6 @@ module.exports = Title = React.createClass
     <div style={containerStyles}>
       <input type='text' style={inputStyles} value={@props.text} 
         onFocus={@onActivateEditMode}
-        onBlur={@onActivateEditMode} 
         onChange={@onTextChange} />
-      {@createEditForm() if @state.editing}
+      {@transferPropsTo(<TitleToolbar titleId={@props.key} fonts={appfonts} />) if @state.editing}
     </div>

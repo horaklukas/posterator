@@ -4,6 +4,10 @@ FluxChildMixin = Fluxxor.FluxChildMixin React
 
 module.exports = Canvas = React.createClass
 	mixins: [FluxChildMixin]
+	propTypes:
+		width: React.PropTypes.number
+		height: React.PropTypes.number
+		url: React.PropTypes.string.isRequired
 
 	render: ->
 		styles =
