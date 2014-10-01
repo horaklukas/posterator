@@ -4,6 +4,7 @@ coffee = require 'gulp-coffee'
 cjsx = require 'gulp-cjsx'
 browserify = require 'gulp-browserify'
 rename = require 'gulp-rename'
+connect = require 'gulp-connect'
 
 paths =
 	coffee: './public/scripts/**/*.coffee'
@@ -24,9 +25,16 @@ gulp.task 'browserify', ->
 	gulp.src('./public/scripts/index.js')
 		.pipe(browserify())
 		.pipe(rename('bundle.js'))
-		.pipe gulp.dest(paths.scripts)
+		.pipe(gulp.dest(paths.scripts))
+		.pipe(connect.reload())
 
-gulp.task 'watch', ->
+gulp.task 'connect', ->
+  connect.server {
+    root: 'public/scripts'
+    livereload: true
+  }
+
+gulp.task 'watch', ['connect'], ->
 	gulp.watch paths.coffee, ['coffee']
 	gulp.watch paths.cjsx, ['cjsx']
 	gulp.watch( 
