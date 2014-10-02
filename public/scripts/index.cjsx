@@ -9,7 +9,7 @@ PostersStore = require './stores/posters-store'
 
 stores =
 	TitlesStore: new TitlesStore [
-		{y: 170, x:150, w: 300, h: 100, text: 'Krkanka', size:20, font:'verd'}
+		{y: 170, x:150, w: 300, h: 100, text: 'Krkanka', size:20, font:'verd', bold: true}
 		{y: 400, x:160, w: 400, h: 65, text: 'Datum', size: 10, font:'verd'}
 	]
 	PostersStore: new PostersStore [

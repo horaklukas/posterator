@@ -27,8 +27,8 @@ module.exports = TitleToolbar = React.createClass
     	<option value={id}>{font}</option>
     )
 
-    <div>
-      <div style={{'backgroundColor': '#ccc'}} >
+    <div style={{'backgroundColor': '#ccc', width:300}} >
+      <p>
         <label>Size</label>
         <input type='number' min={2} max={100} value={@props.size} 
           onChange={@onSizeChange} />
@@ -36,9 +36,14 @@ module.exports = TitleToolbar = React.createClass
         <select value={@props.font} onChange={@onFontFamilyChange}>
           {fontsList}
         </select>
+      </p>
+      <p>
         <label>Bold</label>
         <input type='checkbox' checked={@props.bold} onChange={@onBoldChange} />
         <label>Italic</label>
         <input type='checkbox' checked={@props.italic} onChange={@onItalicChange} />
-      </div>
+      </p>
+      <p>
+        <button style={width: '100%'}>Confirm</button>
+      </p>
     </div>
