@@ -28,6 +28,8 @@ gulp.task 'browserify', ->
 		.pipe(gulp.dest(paths.scripts))
 		.pipe(connect.reload())
 
+gulp.task 'default', ['coffee', 'cjsx', 'browserify']
+
 gulp.task 'connect', ->
   connect.server {
     root: 'public/scripts'
@@ -37,7 +39,7 @@ gulp.task 'connect', ->
 gulp.task 'watch', ['connect'], ->
 	gulp.watch paths.coffee, ['coffee']
 	gulp.watch paths.cjsx, ['cjsx']
-	gulp.watch( 
+	gulp.watch(
 		['./public/scripts/**/*.js','!./public/scripts/bundle.js']
 		['browserify']
 	)

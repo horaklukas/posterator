@@ -22,15 +22,15 @@ module.exports = TitleToolbar = React.createClass
 
   render: ->
     selectedFont = null
-    
-    fontsList = (for id, font of @props.fonts 
+
+    fontsList = (for id, font of @props.fonts
     	<option value={id}>{font}</option>
     )
 
-    <div style={{'backgroundColor': '#ccc', width:300}} >
+    <div style={{'backgroundColor': '#ccc', width:350}} >
       <p>
         <label>Size</label>
-        <input type='number' min={2} max={100} value={@props.size} 
+        <input type='number' min={2} max={100} size={3} value={@props.size}
           onChange={@onSizeChange} />
         <label>Font family</label>
         <select value={@props.font} onChange={@onFontFamilyChange}>
@@ -44,6 +44,6 @@ module.exports = TitleToolbar = React.createClass
         <input type='checkbox' checked={@props.italic} onChange={@onItalicChange} />
       </p>
       <p>
-        <button style={width: '100%'}>Confirm</button>
+        <button style={width: '100%'} onClick={@props.onConfirm}>Confirm</button>
       </p>
     </div>
