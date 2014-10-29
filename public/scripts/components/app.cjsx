@@ -22,7 +22,7 @@ module.exports = App = React.createClass
 			italic={title.italic}
 			key={idx}
 			editing={@state.editingTitle is idx}
-			onEditModeActivate={@editModeActivate} />
+			onEditModeActivate={@editModeActivate} } />
 
 	###*
   * @param {boolean} activate If edit mode activate or deactivate

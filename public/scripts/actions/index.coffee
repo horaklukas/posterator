@@ -5,3 +5,6 @@ module.exports =
 
 		changeText: (id, text) ->
 			@dispatch 'TEXT_CHANGE', {id: id, text: text}
+
+		changePosition: (id, left, top) ->
+			@dispatch 'POSITION_CHANGE', {id: id, x: left, y: top}			

@@ -11,14 +11,18 @@ paths =
 	cjsx: './public/scripts/**/*.cjsx'
 	scripts: './public/scripts'
 
+handleError = (err) ->
+	gutil.log gutil.colors.red('Error:'), err
+	@end?()
+
 gulp.task 'coffee', ->
 	gulp.src(paths.coffee)
-		.pipe(coffee({bare: true})).on('error', gutil.log)
+		.pipe(coffee({bare: true})).on('error', handleError)
 		.pipe gulp.dest(paths.scripts)
 
 gulp.task 'cjsx', ->
 	gulp.src(paths.cjsx)
-		.pipe(cjsx({bare: true})).on('error', gutil.log)
+		.pipe(cjsx({bare: true})).on('error', handleError)
 		.pipe gulp.dest(paths.scripts)
 
 gulp.task 'browserify', ->

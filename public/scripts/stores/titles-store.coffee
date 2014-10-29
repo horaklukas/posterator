@@ -6,6 +6,7 @@ module.exports = TitlesStore = Fluxxor.createStore
 
 		@bindActions 'FONT_CHANGE', @handleFontChange
 		@bindActions 'TEXT_CHANGE', @handleTextChange
+		@bindActions 'POSITION_CHANGE', @handlePositionChange
 
 	handleFontChange: (payload) ->
 		@titles_[payload.id][payload.prop] = payload.value
@@ -14,6 +15,13 @@ module.exports = TitlesStore = Fluxxor.createStore
 
 	handleTextChange: (payload) ->
 		@titles_[payload.id].text = payload.text
+
+		@emit 'change'
+
+	handlePositionChange: (payload) ->
+		title = @titles_[payload.id]
+		title.x = payload.x
+		title.y = payload.y
 
 		@emit 'change'
 
