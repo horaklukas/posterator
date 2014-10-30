@@ -1,0 +1,29 @@
+@import 'nib'
+
+.overlay
+  display: none 
+  fixed: top right bottom left
+  opacity: 0.7
+  background-color: #000
+  &.visible
+    display: block
+    
+.title
+  position: absolute
+  .mover
+    display: inline-block
+    size: 15px
+    cursor: move
+    
+  input
+    width: auto
+    border: 0 // '1px solid black'
+    text-overflow: visible
+
+  .toolbar
+    width: 350px
+    border: 2px outset
+    border-radius: 5px
+    background-color: #CCC
+    p
+      margin: 10px 0 2px 0

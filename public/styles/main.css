@@ -1,0 +1,40 @@
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0.7;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+  filter: alpha(opacity=70);
+  background-color: #000;
+}
+.overlay.visible {
+  display: block;
+}
+.title {
+  position: absolute;
+}
+.title .mover {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  cursor: move;
+}
+.title input {
+  width: auto;
+  border: 0;
+  -o-text-overflow: visible;
+  text-overflow: visible;
+}
+.title .toolbar {
+  width: 350px;
+  border: 2px outset;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  background-color: #ccc;
+}
+.title .toolbar p {
+  margin: 10px 0 2px 0;
+}

@@ -11,14 +11,18 @@ module.exports = TitleToolbar = React.createClass
   onFontFamilyChange: ({target}) ->
     @onFontChange 'font', target.value
 
-  onBoldChange: ({target}) ->
-    @onFontChange 'bold', target.checked
-
-  onItalicChange: ({target}) ->
-    @onFontChange 'italic', target.checked
+  handleModifierChange: (name, value) ->
+    @onFontChange name, value
 
   onFontChange: (property, value) ->
     @getFlux().actions.titles.changeFont @props.titleId, property, value
+
+  ###*
+  * @param {string} name Name of modifier, also name of property
+  * @param {boolean} value Value for modifier 
+  ###
+  createModifier: (name, value) ->
+    <FontModifier name={name} value={value} onChange={@handleModifierChange} />
 
   render: ->
     selectedFont = null
@@ -27,7 +31,7 @@ module.exports = TitleToolbar = React.createClass
     	<option value={id}>{font}</option>
     )
 
-    <div style={{'backgroundColor': '#ccc', width:350}} >
+    <div className="toolbar" >
       <p>
         <label>Size</label>
         <input type='number' min={2} max={100} size={3} value={@props.size}
@@ -39,11 +43,18 @@ module.exports = TitleToolbar = React.createClass
       </p>
       <p>
         <label>Bold</label>
-        <input type='checkbox' checked={@props.bold} onChange={@onBoldChange} />
+        {@createModifier 'bold', @props.bold}
         <label>Italic</label>
-        <input type='checkbox' checked={@props.italic} onChange={@onItalicChange} />
+        {@createModifier 'italic', @props.italic}
       </p>
       <p>
         <button style={width: '100%'} onClick={@props.onConfirm}>Confirm</button>
       </p>
     </div>
+
+FontModifier = React.createClass
+  handleChange: (e) ->
+    @props.onChange @props.name, e.target.checked
+
+  render: ->
+    <input type='checkbox' checked={@props.value} onChange={@handleChange} />

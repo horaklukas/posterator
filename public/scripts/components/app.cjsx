@@ -1,4 +1,5 @@
 React = require 'react'
+classSet = require 'react/lib/cx'
 Fluxxor = require 'fluxxor'
 FluxMixin = Fluxxor.FluxMixin React
 StoreWatchMixin = Fluxxor.StoreWatchMixin
@@ -45,18 +46,13 @@ module.exports = App = React.createClass
 
 	render: ->
 		{w, h, url} = @state.poster
-		overlayStyles =
-			backgroundColor: 'black'
-			position: 'fixed'
-			top: 0
-			right: 0
-			bottom: 0
-			left: 0
-			opacity: 0.7
-			display: if @state.editingTitle? then 'block' else 'none'
+		overlayClasses = classSet {
+			overlay: true
+			visible: @state.editingTitle?
+		}
 
 		<div>
 			<Canvas width={w} height={h} url={url} />
-			<div style={overlayStyles} onClick={@onOverlayClick} />
+			<div className={overlayClasses} onClick={@onOverlayClick} />
 			{@state.titles.map @createTitle}
 		</div>

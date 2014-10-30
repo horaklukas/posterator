@@ -55,7 +55,6 @@ module.exports = Title = React.createClass
 
   render: ->
     containerStyles =
-      position: 'absolute'
       top: @props.top + @state.offsetY
       left: @props.left + @state.offsetX
 
@@ -66,22 +65,14 @@ module.exports = Title = React.createClass
       fontFamily: appfonts[@props.font]
       fontWeight: if @props.bold then 'bold' else 'normal'
       fontStyle: if @props.italic then 'italic' else 'normal'
-      width: 'auto'
       height: boxHeight
       lineHeight: "#{boxHeight}px"
       backgroundColor: if @props.editing then 'white' else 'transparent'
-      border: 0#'1px solid black'
-      textOverflow: 'visible'
 
-    moverStyles =
-      display: 'inline-block'
-      width: 15
-      height: 15
-      cursor: 'move'
 
-    <div style={containerStyles}>
-      <span style={moverStyles} onMouseDown={@onDragMover}>&nbsp;</span>
-      <input type='text' style={inputStyles} value={@props.text}
+    <div className="title" style={containerStyles}>
+      <span className="mover" onMouseDown={@onDragMover}>&nbsp;</span>
+      <input type="text" style={inputStyles} value={@props.text}
         onFocus={@onActivateEditMode}
         onChange={@onTextChange}
         size={@props.text.length} />
