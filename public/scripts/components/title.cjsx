@@ -3,6 +3,7 @@ Fluxxor = require 'fluxxor'
 FluxChildMixin = Fluxxor.FluxChildMixin React
 TitleToolbar = require './title-toolbar'
 domEvents = require 'dom-events'
+Object.assign ?= require 'object.assign'
 
 appfonts =
   'arial': 'Arial'
@@ -69,17 +70,13 @@ module.exports = Title = React.createClass
       lineHeight: "#{boxHeight}px"
       backgroundColor: if @props.editing then 'white' else 'transparent'
 
-
     <div className="title" style={containerStyles}>
       <span className="mover" onMouseDown={@onDragMover}>&nbsp;</span>
       <input type="text" style={inputStyles} value={@props.text}
         onFocus={@onActivateEditMode}
         onChange={@onTextChange}
         size={@props.text.length} />
-      {
-        if @props.editing
-          @transferPropsTo(<TitleToolbar titleId={@props.key} fonts={appfonts}
-            onConfirm={@onEditDialogConfirm} />
-          )
-      }
+      {if @props.editing
+        <TitleToolbar titleId={@props.key} fonts={appfonts}
+          onConfirm={@onEditDialogConfirm} {...@props} /> }
     </div>
