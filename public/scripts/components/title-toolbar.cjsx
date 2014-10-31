@@ -1,21 +1,27 @@
 React = require 'react'
 Fluxxor = require 'fluxxor'
 FluxChildMixin = Fluxxor.FluxChildMixin React
+ColorPicker = require 'react-colorpicker'
 
 module.exports = TitleToolbar = React.createClass
   mixins: [FluxChildMixin]
 
-  onSizeChange: ({target}) ->
-    @onFontChange 'size', Number target.value
+  handleSizeChange: ({target}) ->
+    @handleFontChange 'size', Number target.value
 
-  onFontFamilyChange: ({target}) ->
-    @onFontChange 'font', target.value
+  handleFontFamilyChange: ({target}) ->
+    @handleFontChange 'font', target.value
 
   handleModifierChange: (name, value) ->
-    @onFontChange name, value
+    @handleFontChange name, value
 
-  onFontChange: (property, value) ->
+  handleFontChange: (property, value) ->
     @getFlux().actions.titles.changeFont @props.titleId, property, value
+
+  handleColorChange: (ev) ->
+
+  getInitialState: ->
+    color: '#000000'
 
   ###*
   * @param {string} name Name of modifier, also name of property
@@ -35,9 +41,9 @@ module.exports = TitleToolbar = React.createClass
       <p>
         <label>Size</label>
         <input type='number' min={2} max={100} size={3} value={@props.size}
-          onChange={@onSizeChange} />
+          onChange={@handleSizeChange} />
         <label>Font family</label>
-        <select value={@props.font} onChange={@onFontFamilyChange}>
+        <select value={@props.font} onChange={@handleFontFamilyChange}>
           {fontsList}
         </select>
       </p>
@@ -46,6 +52,7 @@ module.exports = TitleToolbar = React.createClass
         {@createModifier 'bold', @props.bold}
         <label>Italic</label>
         {@createModifier 'italic', @props.italic}
+        <ColorPicker color={@state.color} onChange={@handleColorChange} />
       </p>
       <p>
         <button style={width: '100%'} onClick={@props.onConfirm}>Confirm</button>
