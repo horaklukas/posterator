@@ -1,0 +1,45 @@
+AppDispatcher = require '../dispatcher/app-dispatcher'
+BaseStore = require './base-store'
+constants = require '../constants/editor-constants'
+
+class EditorStore extends BaseStore
+  constructor: ->
+    @dragged = {}
+    @dispatcherIndex = AppDispatcher.register @actionsHandler
+
+  actionsHandler: (payload) =>
+    {type} = payload
+
+    switch type
+      when constants.FONTS_LIST_LOADED then @fonts = payload.fonts
+      #when constants.FONT_LOADED then ''
+
+      when constants.TITLE_MOVE_START
+        @dragged = {
+          id: payload.titleId,
+          x: payload.x,
+          y: payload.y
+          initialPosition: {
+            x: payload.startPosition.x, y: payload.startPosition.y
+          }
+        }
+
+      when constants.TITLE_MOVE_STOP then @dragged = {}
+      else return # dont emit change since we didnt any change
+
+    @emit BaseStore.CHANGE_EVENT
+
+  getAvailableFonts: ->
+    @fonts
+
+  isTitleDragged: (titleId) ->
+    @dragged.id is titleId
+
+  getDraggedTitleId: ->
+    @dragged.id
+
+  countTitlePosition: (actualClientX, actualClientY) ->
+    x: (actualClientX - @dragged.x) + @dragged.initialPosition.x
+    y: (actualClientY - @dragged.y) + @dragged.initialPosition.y
+
+module.exports = new EditorStore
