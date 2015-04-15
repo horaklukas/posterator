@@ -10,8 +10,8 @@ class Canvas extends React.Component
     {poster} = @props
 
     <div className="canvas">
-      <img src={poster.url} ref="image" onLoad={@redrawCanvas} />
-      <canvas ref="canvas" width={poster.width} height={poster.height}></canvas>
+      <img src={poster.url} ref="image" width={poster.width} height={poster.height} />
+      <canvas ref="canvas"></canvas>
     </div>
 
 module.exports = Canvas

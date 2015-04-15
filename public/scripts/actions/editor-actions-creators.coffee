@@ -15,3 +15,17 @@ module.exports =
 
   stopTitleMove: (titleId) ->
     AppDispatcher.dispatch {type: constants.TITLE_MOVE_STOP}
+
+  selectTitle: (titleId) ->
+    AppDispatcher.dispatch {type: constants.TITLE_SELECT, titleId: titleId}
+
+  unselectTitle: (titleId) ->
+    AppDispatcher.dispatch {type: constants.TITLE_UNSELECT}
+
+  changeTitleText: (text) ->
+    AppDispatcher.dispatch {type: constants.TITLE_TEXT_CHANGED, text: text}
+
+  changeTitleFont: (property, value) ->
+    AppDispatcher.dispatch {
+      type: constants.TITLE_FONT_CHANGED, property: property, value: value
+    }

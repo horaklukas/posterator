@@ -23,6 +23,18 @@ class PostersStore extends BaseStore
           payload.x, payload.y
         )
 
+      when editorConstants.TITLE_TEXT_CHANGED
+        AppDispatcher.waitFor [EditorStore.dispatcherIndex]
+        titleId = EditorStore.getSelectedTitleId()
+
+        @titles[titleId].text = payload.text
+
+      when editorConstants.TITLE_FONT_CHANGED
+        AppDispatcher.waitFor [EditorStore.dispatcherIndex]
+        titleId = EditorStore.getSelectedTitleId()
+
+        @titles[titleId].font[payload.property] = payload.value
+
       else return # dont emit change since we didnt any change
 
     @emit BaseStore.CHANGE_EVENT

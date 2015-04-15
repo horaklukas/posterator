@@ -10,6 +10,7 @@ getAppState = ->
 	posters: PosterStore.getAllPosters()
 	poster: PosterStore.getSelectedPoster()
 	titles: PosterStore.getPosterTitles()
+	selectedTitle: EditorStore.getSelectedTitleId()
 	#fonts: AppStore.getFonts()
 
 class App extends React.Component
@@ -30,10 +31,12 @@ class App extends React.Component
 		EditorStore.removeChangeListener @_onChange
 
 	render: ->
-		{poster} = @state
+		{poster, titles, selectedTitle, posters} = @state
 		Content =
-			if poster? then <Editor poster={poster} titles={@state.titles} />
-			else <PosterSelect posters={@state.posters} />
+			if poster?
+				<Editor poster={poster} titles={titles} selectedTitle={selectedTitle} />
+			else
+				<PosterSelect posters={posters} />
 
 		<div>{Content}</div>
 

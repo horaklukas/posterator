@@ -1,6 +1,9 @@
 React = require 'react'
 domEvents = require 'dom-events'
 actions = require '../actions/editor-actions-creators'
+_includes = require 'lodash.includes'
+
+TITLE_CLASS = 'editable-title'
 
 class EditableTitle extends React.Component
   handleDrag: (e) =>
@@ -23,6 +26,17 @@ class EditableTitle extends React.Component
     domEvents.off document, 'mousemove', @handleMove
     domEvents.off document, 'mouseup', @handleDrop
 
+  handleSelect: (e) =>
+    actions.selectTitle @props.id
+
+    canvasElement = document.querySelector '.canvas'
+    domEvents.once canvasElement, 'click', @handleUnselect
+
+  handleUnselect: (e) =>
+    if _includes e.target.className, TITLE_CLASS then return e.preventDefault()
+
+    actions.unselectTitle @props.id
+
   render: ->
     {position, font} = @props
     styles =
@@ -37,10 +51,12 @@ class EditableTitle extends React.Component
       if font.italic is true then 'italic'
       else if font.bold then 'bold'
 
-    classes = 'editable-title'
+    classes = TITLE_CLASS
     classes += ' dragged' if @props.dragged
+    classes += ' selected' if @props.selected
 
     <div className={classes} style={styles}
+      onClick={@handleSelect}
       onMouseDown={@handleDrag}
       onMouseMove={@handleMove}
       onMouseUp={@handleDrop}>{@props.text}</div>

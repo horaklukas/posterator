@@ -1,6 +1,8 @@
 describe 'Component PosterEditor', ->
   before ->
-    @editorStoreMock = isTitleDragged: sinon.stub()
+    @editorStoreMock =
+      isTitleDragged: sinon.stub()
+      isTitleSelected: sinon.stub()
 
     mockery.registerMock './editable-title', mockComponent 'titleMock'
     mockery.registerMock './toolbox', mockComponent 'toolboxMock'
@@ -23,6 +25,7 @@ describe 'Component PosterEditor', ->
     @props =
       poster: {width: 80, height: 96}
       titles: @titles
+      selectedTitle: 1
 
     @editor = TestUtils.renderIntoDocument React.createElement(@Editor, @props)
     @elem = TestUtils.findRenderedDOMComponentWithClass @editor, 'editor'
@@ -62,11 +65,42 @@ describe 'Component PosterEditor', ->
     expect(@titles[0].props).to.have.property 'dragged', true
     expect(@titles[1].props).to.have.property 'dragged', false
 
+  it 'should set property selected for each title', ->
+    @editorStoreMock.isTitleSelected.withArgs(0).returns false
+    @editorStoreMock.isTitleSelected.withArgs(1).returns true
+
+    @editor.forceUpdate()
+
+    expect(@titles[0].props).to.have.property 'selected', false
+    expect(@titles[1].props).to.have.property 'selected', true
+
   it 'should set editor height equal to poster', ->
     expect(@elem.props.style).to.be.an('object').and.have.property 'height', 96
+
+  it 'should create toolbox when selected title id exists', ->
+    TestUtils.findRenderedDOMComponentWithClass @editor, 'toolboxMock'
+
+  it 'should pass selected title data to toolbox', ->
+    toolbox = TestUtils.findRenderedDOMComponentWithClass @editor, 'toolboxMock'
+
+    expect(toolbox.props).to.have.property 'text', 'Title 2 top'
+    expect(toolbox.props).to.have.property('font').that.eql {
+      size: 16, family: 'Arial', bold: true, italic: false, color: 'f0f0f0'
+    }
 
   it 'should set toolbox left position equal to poster width', ->
     toolbox = TestUtils.findRenderedDOMComponentWithClass @elem, 'toolboxMock'
 
     expect(toolbox.props).to.have.property 'left', 80
 
+  it 'should not create toolbox when selected title id not exists', ->
+    props =
+      titles: @titles
+      selectedTitle: null
+      poster: @props.poster
+
+    editor = TestUtils.renderIntoDocument React.createElement(@Editor, props)
+    elem = TestUtils.findRenderedDOMComponentWithClass editor, 'editor'
+
+    toolbox = TestUtils.scryRenderedDOMComponentsWithClass editor, 'toolboxMock'
+    expect(toolbox).to.have.length 0

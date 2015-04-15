@@ -25,6 +25,8 @@ class EditorStore extends BaseStore
         }
 
       when constants.TITLE_MOVE_STOP then @dragged = {}
+      when constants.TITLE_SELECT then @selectedTitle = payload.titleId
+      when constants.TITLE_UNSELECT then @selectedTitle = null
       else return # dont emit change since we didnt any change
 
     @emit BaseStore.CHANGE_EVENT
@@ -41,5 +43,11 @@ class EditorStore extends BaseStore
   countTitlePosition: (actualClientX, actualClientY) ->
     x: (actualClientX - @dragged.x) + @dragged.initialPosition.x
     y: (actualClientY - @dragged.y) + @dragged.initialPosition.y
+
+  isTitleSelected: (id) ->
+    @selectedTitle is id
+
+  getSelectedTitleId: ->
+    @selectedTitle
 
 module.exports = new EditorStore

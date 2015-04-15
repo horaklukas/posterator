@@ -1,5 +1,68 @@
+fontSize = 22px
+widgetHeight = fontSize * 1.8
+
+widgetBase()
+  size: 100% widgetHeight
+  margin: 0 0 (fontSize / 4) 0
+  border-radius: 3px
+  font-size: fontSize
+  background-color: #FFF
+
 .toolbox
   size: 400px 100%
   absolute: top
-  background-color: #000
-  opacity: 0.05
+  border-radius: 5px
+  background-color: rgba(0, 0, 0, 0.05)
+
+  .text
+    widgetBase()
+    border: 1px solid #aaa
+
+  .slider
+    widgetBase()
+    border: 1px solid grey
+
+    .handle
+      top: 1px
+      size: 50px widgetHeight - 2
+      line-height: @height
+      text-align: center
+      background-color: black
+      color: white
+      cursor: pointer
+
+      &.active
+        background-color: grey
+  /*
+  .horizontal-slider
+    width: 100%
+    max-width: 500px
+    height: 50px
+    border: 1px solid grey
+
+    .handle
+      top: 1px
+      width: 50px
+      height: 48px
+      line-height: 48px
+
+  .vertical-slider
+    height: 380px
+    width: 50px
+    border: 1px solid grey
+
+    .handle
+      left: 1px
+      width: 48px
+      line-height: 50px
+
+  .handle
+      font-size: 0.9em
+      text-align: center
+      background-color: black
+      color: white
+      cursor: pointer
+
+    &.active
+      background-color: grey
+  */

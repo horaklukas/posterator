@@ -3,8 +3,10 @@ describe 'Component EditableTitle', ->
     @actionsMock =
       startTitleMove: sinon.spy()
       stopTitleMove: sinon.spy()
+      selectTitle: sinon.spy()
+      unselectTitle: sinon.spy()
 
-    @domEventsMock = on: sinon.spy(), off: sinon.spy()
+    @domEventsMock = on: sinon.spy(), off: sinon.spy(), once: sinon.spy()
 
     mockery.registerMock '../actions/editor-actions-creators', @actionsMock
     mockery.registerMock 'dom-events', @domEventsMock
@@ -22,7 +24,10 @@ describe 'Component EditableTitle', ->
   beforeEach ->
     @actionsMock.startTitleMove.reset()
     @actionsMock.stopTitleMove.reset()
+    @actionsMock.selectTitle.reset()
+    @actionsMock.unselectTitle.reset()
     @domEventsMock.on.reset()
+    @domEventsMock.once.reset()
     @domEventsMock.off.reset()
 
   after ->
@@ -59,12 +64,33 @@ describe 'Component EditableTitle', ->
 
     expect(elem.props.className).to.contain ' dragged'
 
+  it 'should have class selected when title is actually selected', ->
+    @props.selected = true
+    @props.dragged = false
+
+    title = TestUtils.renderIntoDocument React.createElement(@Title, @props)
+    elem = TestUtils.findRenderedDOMComponentWithClass title, 'editable-title'
+
+    expect(elem.props.className).to.contain ' selected'
+
   it 'should create startTitleMove action with title id when mouse down', ->
     TestUtils.Simulate.mouseDown @elem, {clientX: 60, clientY: 30}
 
     @actionsMock.startTitleMove.should.been.calledOnce.and.calledWithExactly(
       8, 60, 30, 136, 20
     )
+
+  it 'should create selectTitle action with title id when clicked', ->
+    TestUtils.Simulate.click @elem
+
+    @actionsMock.selectTitle.should.been.calledOnce.and.calledWithExactly 8
+
+  it 'should listen for click in canvas to unselect title', ->
+    TestUtils.Simulate.click @elem
+
+    @domEventsMock.once.should.been.calledOnce
+    @domEventsMock.once.lastCall.args[1].should.equal 'click'
+    @domEventsMock.once.lastCall.args[2].should.equal @title.handleUnselect
 
   it 'should listen for mouse events over document when mousedown', ->
     TestUtils.Simulate.mouseDown @elem, {clientX: 60, clientY: 30}
@@ -92,3 +118,14 @@ describe 'Component EditableTitle', ->
     @domEventsMock.off.secondCall.should.been.calledWithExactly(
       document, 'mouseup',  @title.handleDrop
     )
+
+  describe 'method unselectTitle', ->
+    it 'should unselect currently selected title when target not title', ->
+      @title.handleUnselect {target: {className: 'not-tit'}, preventDefault: ->}
+
+      @actionsMock.unselectTitle.should.been.calledOnce
+
+    it 'should not unselect currently selected title when target is title', ->
+      @title.handleUnselect {target: @elem.getDOMNode(), preventDefault: ->}
+
+      @actionsMock.unselectTitle.should.not.been.called

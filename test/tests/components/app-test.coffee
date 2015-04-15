@@ -10,6 +10,7 @@ describe 'Component App', ->
     @editorStoreMock =
       addChangeListener: sinon.spy()
       removeChangeListener: sinon.spy()
+      getSelectedTitleId: sinon.stub()
 
     mockery.registerMock './poster-editor', mockComponent 'editorMock'
     mockery.registerMock './poster-select', mockComponent 'posterSelectMock'
