@@ -15,6 +15,7 @@ describe 'Component EditableTitle', ->
     @props =
       id: 8
       position: {x: 136, y: 20}
+      angle: 20
       text: 'This text is editable'
       font: {family: 'Arial', size: 24, bold: true, italic: false, color: 'bbb'}
 
@@ -55,6 +56,9 @@ describe 'Component EditableTitle', ->
 
   it 'should show given text inside title', ->
     expect(@elem.props.children).to.equal 'This text is editable'
+
+  it 'should set text transformation by text angle', ->
+    expect(@elem.props.style).to.have.property 'transform', 'rotate(20deg)'
 
   it 'should have class dragged when title is actually dragged', ->
     @props.dragged = true

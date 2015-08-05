@@ -35,6 +35,12 @@ class PostersStore extends BaseStore
 
         @titles[titleId].font[payload.property] = payload.value
 
+      when editorConstants.TITLE_ANGLE_CHANGED
+        AppDispatcher.waitFor [EditorStore.dispatcherIndex]
+        titleId = EditorStore.getSelectedTitleId()
+
+        @titles[titleId].angle = payload.angle
+
       else return # dont emit change since we didnt any change
 
     @emit BaseStore.CHANGE_EVENT

@@ -7,12 +7,12 @@ _map = require 'lodash.map'
 
 class Editor extends React.Component
   createTitle: (title, id) ->
-    {position, text, font} = title
+    {position, text, font, angle} = title
     dragged = EditorStore.isTitleDragged(id)
     selected = EditorStore.isTitleSelected(id)
 
     <Title position={position} font={font} text={text} key={id} id={id}
-      dragged={dragged} selected={selected} />
+      angle={angle} dragged={dragged} selected={selected} />
 
   render: ->
     {poster, titles, selectedTitle} = @props
@@ -20,7 +20,8 @@ class Editor extends React.Component
 
     Titles = _map titles, @createTitle
     TitleToolbox = if titleToEdit?
-      <Toolbox left={poster.width} text={titleToEdit.text} font={titleToEdit.font} />
+      <Toolbox left={poster.width} text={titleToEdit.text} font={titleToEdit.font}
+        titleAngle={titleToEdit.angle} />
 
     <div className="editor" style={height: poster.height} >
       <Canvas poster={poster} />

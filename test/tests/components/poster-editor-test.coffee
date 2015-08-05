@@ -12,12 +12,12 @@ describe 'Component PosterEditor', ->
     @Editor = require "../../../public/scripts/components/poster-editor"
     @titles = [
       {
-        position: {top: 170, left: 150}, text: 'Title 1 bottom', font: {
+        position: {top: 170, left: 150}, text: 'Title 1 bottom', angle: 0, font: {
           size: 20, family: 'Verdana', bold: false, italic: false, color: '000'
         }
       }
       {
-        position: {top: 46, left: 200}, text: 'Title 2 top', font: {
+        position: {top: 46, left: 200}, text: 'Title 2 top', angle: 45, font: {
           size: 16, family: 'Arial', bold: true, italic: false, color: 'f0f0f0'
         }
       }
@@ -40,7 +40,8 @@ describe 'Component PosterEditor', ->
   it 'should create all passed title', ->
     expect(@titles).to.have.length 2
 
-  it 'should create each title with position, font and text', ->
+  it 'should create each title with position, font, angle and text', ->
+    expect(@titles[0].props).to.have.property('angle').that.eql 0
     expect(@titles[0].props).to.have.property('position').that.eql {
       top:170, left: 150
     }
@@ -48,6 +49,7 @@ describe 'Component PosterEditor', ->
     expect(@titles[0].props).to.have.property('font').that.eql {
       size: 20, family: 'Verdana', bold: false, italic: false, color: '000'
     }
+    expect(@titles[1].props).to.have.property('angle').that.eql 45
     expect(@titles[1].props).to.have.property('position').that.eql {
       top:46, left: 200
     }
@@ -83,6 +85,7 @@ describe 'Component PosterEditor', ->
   it 'should pass selected title data to toolbox', ->
     toolbox = TestUtils.findRenderedDOMComponentWithClass @editor, 'toolboxMock'
 
+    expect(toolbox.props).to.have.property 'titleAngle', 45
     expect(toolbox.props).to.have.property 'text', 'Title 2 top'
     expect(toolbox.props).to.have.property('font').that.eql {
       size: 16, family: 'Arial', bold: true, italic: false, color: 'f0f0f0'

@@ -3,6 +3,7 @@ describe 'Component Toolbox', ->
     @actionsMock =
       changeTitleText: sinon.spy()
       changeTitleFont: sinon.spy()
+      changeTitleAngle: sinon.spy()
 
     mockery.registerMock '../actions/editor-actions-creators', @actionsMock
     mockery.registerMock 'react-slider', mockComponent 'sliderMock'
@@ -12,6 +13,7 @@ describe 'Component Toolbox', ->
     @props =
       left: 600
       text: 'Title text 1'
+      titleAngle: 35
       font: {
         size: 20, family: 'Verdana', bold: false, italic: false, color: '000'
       }
@@ -49,7 +51,8 @@ describe 'Component Toolbox', ->
       @actionsMock.changeTitleFont.reset()
 
     it 'should have label as a first child inside container', ->
-      expect(@container.props.children[0]).to.equal 'Font size'
+      label = TestUtils.findRenderedDOMComponentWithClass @container, 'label'
+      expect(label.getDOMNode().textContent).to.equal 'Font size'
 
     it 'should have constant min and max equal to defined constants', ->
       expect(@slider.props).to.have.property 'min', @constants.FONT_SIZE.MIN
@@ -66,3 +69,28 @@ describe 'Component Toolbox', ->
       @actionsMock.changeTitleFont.should.been.calledWithExactly(
         'size', 30
       )
+
+  describe 'Font slider', ->
+    beforeEach ->
+      containers = TestUtils.scryRenderedDOMComponentsWithClass @elem, 'slider-container'
+      @container = containers[1]
+      @slider = TestUtils.findRenderedDOMComponentWithClass @container, 'sliderMock'
+      @actionsMock.changeTitleAngle.reset()
+
+    it 'should have label as a first child inside container', ->
+      label = TestUtils.findRenderedDOMComponentWithClass @container, 'label'
+      expect(label.getDOMNode().textContent).to.equal 'Text rotation'
+
+    it 'should have range defined from 0 to 360', ->
+      expect(@slider.props).to.have.property 'min', 0
+      expect(@slider.props).to.have.property 'max', 360
+
+    it 'should set title angle as a actual value', ->
+      expect(@slider.props).to.have.property 'value', 35
+
+    it 'should call changeTitleAngle with angle value when changed', ->
+      callback = @slider.props.onChange
+      callback(38)
+
+      @actionsMock.changeTitleAngle.should.been.calledOnce
+      @actionsMock.changeTitleAngle.should.been.calledWithExactly 38

@@ -105,7 +105,27 @@ describe 'PosterStore', ->
     expect(actualTitles).to.have.deep.property '[0].font.size', 8
     expect(actualTitles).to.have.deep.property '[0].font.family', 'Verdana'
 
+  it 'should set new title angle when action TITLE_ANGLE_CHANGED is invoked', ->
+    titles = [ { angle: 168 }, { angle: 230}  ]
+
+    @editorStoreMock.getSelectedTitleId.returns 1
+    @actionHandler {type: @constants.TITLES_LOADED, titles: titles}
+
+    actualTitles = @posterStore.getPosterTitles()
+    expect(actualTitles).to.have.deep.property '[1].angle', 230
+
+    @actionHandler {type: @constants2.TITLE_ANGLE_CHANGED, angle: 233}
+
+    @dispatcherMock.waitFor.should.been.calledWithExactly(
+      [@editorStoreMock.dispatcherIndex]
+    )
+
+    actualTitles = @posterStore.getPosterTitles()
+    expect(actualTitles).to.have.deep.property '[1].angle', 233
+
   it 'should emit change event for known actions', ->
+    @editorStoreMock.getSelectedTitleId.returns 0
+
     @actionHandler {type: @constants.POSTERS_LOADED, posters: []}
     @posterStore.emit.should.been.calledOnce
 
@@ -120,11 +140,14 @@ describe 'PosterStore', ->
     @actionHandler {type: @constants2.TITLE_MOVE, x: 6, y: 8}
     @posterStore.emit.callCount.should.equal 4
 
-    @actionHandler {type: @constants2.TITLE_TEXT_CHANGED}
+    @actionHandler {type: @constants2.TITLE_TEXT_CHANGED, text: ''}
     @posterStore.emit.callCount.should.equal 5
 
     @actionHandler {type: @constants2.TITLE_FONT_CHANGED, property: 'size', value: 3}
     @posterStore.emit.callCount.should.equal 6
+
+    @actionHandler {type: @constants2.TITLE_ANGLE_CHANGED, angle: 12}
+    @posterStore.emit.callCount.should.equal 7
 
   it 'should not emit change event for unknown actions', ->
     @actionHandler {type: @constants.UNKNOWN_ACTION, posters: []}

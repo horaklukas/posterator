@@ -6,6 +6,7 @@ module.exports =
   TITLE_UNSELECT: 'title-unselect'
   TITLE_TEXT_CHANGED: 'title-text-changed'
   TITLE_FONT_CHANGED: 'title-font-changed'
+  TITLE_ANGLE_CHANGED: 'title-angle-changed'
   FONTS_LIST_LOADED: 'fonts-list-loaded'
   FONT_LOADED: 'font-loaded'
   FONT_SIZE:

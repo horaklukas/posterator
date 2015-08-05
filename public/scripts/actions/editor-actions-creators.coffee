@@ -29,3 +29,6 @@ module.exports =
     AppDispatcher.dispatch {
       type: constants.TITLE_FONT_CHANGED, property: property, value: value
     }
+
+  changeTitleAngle: (angle) ->
+    AppDispatcher.dispatch {type: constants.TITLE_ANGLE_CHANGED, angle: angle}

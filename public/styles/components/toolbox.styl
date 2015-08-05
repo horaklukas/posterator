@@ -2,8 +2,8 @@ fontSize = 22px
 widgetHeight = fontSize * 1.8
 
 widgetBase()
-  size: 100% widgetHeight
-  margin: 0 0 (fontSize / 4) 0
+  size: 90% widgetHeight
+  margin: 0 5% (fontSize / 4) 5%
   border-radius: 3px
   font-size: fontSize
   background-color: #FFF
@@ -13,6 +13,12 @@ widgetBase()
   absolute: top
   border-radius: 5px
   background-color: rgba(0, 0, 0, 0.05)
+
+  .label
+    display: inline-block
+    margin: 0.4em auto 0.2em 2%
+    font-family: Verdana, Arial, sans-serif
+    font-size: fontSize * 0.8
 
   .text
     widgetBase()

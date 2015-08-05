@@ -38,14 +38,15 @@ class EditableTitle extends React.Component
     actions.unselectTitle @props.id
 
   render: ->
-    {position, font} = @props
+    {position, font, angle} = @props
     styles =
       top: position.y
       left: position.x
       fontFamily: font.family
       fontSize: font.size
       color: '#' + font.color
-
+      # TODO add vendor prefix variations of transform property
+      transform: "rotate(#{angle}deg)"
 
     styles.fontStyle =
       if font.italic is true then 'italic'
