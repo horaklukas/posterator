@@ -11,6 +11,7 @@ describe 'Component App', ->
       addChangeListener: sinon.spy()
       removeChangeListener: sinon.spy()
       getSelectedTitleId: sinon.stub()
+      getAvailableFonts: sinon.stub()
 
     mockery.registerMock './poster-editor', mockComponent 'editorMock'
     mockery.registerMock './poster-select', mockComponent 'posterSelectMock'

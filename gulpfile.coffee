@@ -7,6 +7,7 @@ source = require 'vinyl-source-stream'
 mocha = require 'gulp-mocha'
 nib = require 'nib'
 connect = require 'gulp-connect'
+watch = require 'gulp-watch'
 
 paths =
   cjsx:
@@ -44,7 +45,7 @@ gulp.task 'cjsx', ->
   gulp.src(paths.cjsx.src)
     .pipe cjsx({bare: true}).on 'error', handleError
     .pipe gulp.dest(paths.cjsx.dest)
-    .pipe connect.reload()
+    #.pipe connect.reload()
 
 gulp.task 'stylus', ->
   gulp.src(paths.stylus.main)
@@ -71,6 +72,6 @@ gulp.task 'connect', ->
   }
 
 gulp.task 'watch', ['connect'], ->
-  gulp.watch paths.cjsx.src, ['cjsx']
-  gulp.watch paths.stylus.src, ['stylus']
-  gulp.watch paths.cjsx.src.concat(paths.test.src), ['test']
+  watch paths.cjsx.src, -> gulp.start ['cjsx', 'test']
+  watch paths.stylus.src, -> gulp.start 'stylus'
+  watch paths.test.src, -> gulp.start 'test'

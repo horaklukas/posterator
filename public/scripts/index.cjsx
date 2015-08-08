@@ -1,13 +1,9 @@
 React = require 'react'
 App = require './components/app'
+EditorUtils = require './utils/editor-utils'
 PosterUtils = require './utils/poster-utils'
-
-fontsList = [
-  'Arial'
-  'Times New Roman'
-  'Verdana'
-]
 
 React.render <App />, document.getElementById 'app'
 
 PosterUtils.loadPosters()
+EditorUtils.loadFonts()

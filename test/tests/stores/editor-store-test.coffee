@@ -20,7 +20,7 @@ describe 'EditorStore', ->
     @dispatcherMock.register.lastCall.args[0].should.be.a 'function'
 
   it 'should emit change event for known actions', ->
-    @actionHandler {type: @constants.FONTS_LIST_LOADED, fonts: []}
+    @actionHandler {type: @constants.FONTS_LOADED, fonts: []}
     @editorStore.emit.should.been.calledOnce
 
     @actionHandler {

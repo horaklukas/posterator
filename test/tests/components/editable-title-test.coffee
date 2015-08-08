@@ -1,4 +1,6 @@
 describe 'Component EditableTitle', ->
+  Title = null
+
   before ->
     @actionsMock =
       startTitleMove: sinon.spy()
@@ -11,7 +13,7 @@ describe 'Component EditableTitle', ->
     mockery.registerMock '../actions/editor-actions-creators', @actionsMock
     mockery.registerMock 'dom-events', @domEventsMock
 
-    @Title = require "../../../public/scripts/components/editable-title"
+    Title = require "../../../public/scripts/components/editable-title"
     @props =
       id: 8
       position: {x: 136, y: 20}
@@ -19,7 +21,7 @@ describe 'Component EditableTitle', ->
       text: 'This text is editable'
       font: {family: 'Arial', size: 24, bold: true, italic: false, color: 'bbb'}
 
-    @title = TestUtils.renderIntoDocument React.createElement(@Title, @props)
+    @title = TestUtils.renderIntoDocument React.createElement(Title, @props)
     @elem = TestUtils.findRenderedDOMComponentWithClass @title, 'editable-title'
 
   beforeEach ->
@@ -49,7 +51,7 @@ describe 'Component EditableTitle', ->
   it 'should set font style for italic title text', ->
     props = position: {}, font: {bold: false, italic: true}
 
-    title = TestUtils.renderIntoDocument React.createElement(@Title, props)
+    title = TestUtils.renderIntoDocument React.createElement(Title, props)
     elem = TestUtils.findRenderedDOMComponentWithClass title, 'editable-title'
 
     expect(elem.props.style).to.have.property 'fontStyle', 'italic'
@@ -63,7 +65,7 @@ describe 'Component EditableTitle', ->
   it 'should have class dragged when title is actually dragged', ->
     @props.dragged = true
 
-    title = TestUtils.renderIntoDocument React.createElement(@Title, @props)
+    title = TestUtils.renderIntoDocument React.createElement(Title, @props)
     elem = TestUtils.findRenderedDOMComponentWithClass title, 'editable-title'
 
     expect(elem.props.className).to.contain ' dragged'
@@ -72,7 +74,7 @@ describe 'Component EditableTitle', ->
     @props.selected = true
     @props.dragged = false
 
-    title = TestUtils.renderIntoDocument React.createElement(@Title, @props)
+    title = TestUtils.renderIntoDocument React.createElement(Title, @props)
     elem = TestUtils.findRenderedDOMComponentWithClass title, 'editable-title'
 
     expect(elem.props.className).to.contain ' selected'

@@ -11,8 +11,7 @@ class EditorStore extends BaseStore
     {type} = payload
 
     switch type
-      when constants.FONTS_LIST_LOADED then @fonts = payload.fonts
-      #when constants.FONT_LOADED then ''
+      when constants.FONTS_LOADED then @fonts = payload.fonts
 
       when constants.TITLE_MOVE_START
         @dragged = {

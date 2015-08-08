@@ -15,13 +15,13 @@ class Editor extends React.Component
       angle={angle} dragged={dragged} selected={selected} />
 
   render: ->
-    {poster, titles, selectedTitle} = @props
+    {poster, titles, selectedTitle, fonts} = @props
     titleToEdit = titles[selectedTitle] ? null
 
     Titles = _map titles, @createTitle
     TitleToolbox = if titleToEdit?
       <Toolbox left={poster.width} text={titleToEdit.text} font={titleToEdit.font}
-        titleAngle={titleToEdit.angle} />
+        titleAngle={titleToEdit.angle} fonts={fonts} />
 
     <div className="editor" style={height: poster.height} >
       <Canvas poster={poster} />

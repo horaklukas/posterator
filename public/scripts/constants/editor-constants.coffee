@@ -7,8 +7,7 @@ module.exports =
   TITLE_TEXT_CHANGED: 'title-text-changed'
   TITLE_FONT_CHANGED: 'title-font-changed'
   TITLE_ANGLE_CHANGED: 'title-angle-changed'
-  FONTS_LIST_LOADED: 'fonts-list-loaded'
-  FONT_LOADED: 'font-loaded'
+  FONTS_LOADED: 'fonts-list-loaded'
   FONT_SIZE:
     MIN: 10
     MAX: 100
