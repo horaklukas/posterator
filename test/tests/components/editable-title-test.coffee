@@ -45,8 +45,8 @@ describe 'Component EditableTitle', ->
     expect(@elem.props.style).to.have.property 'fontSize', 24
     expect(@elem.props.style).to.have.property 'color', '#bbb'
 
-  it 'should set font style for bold title text', ->
-    expect(@elem.props.style).to.have.property 'fontStyle', 'bold'
+  it 'should set font weight for bold title text', ->
+    expect(@elem.props.style).to.have.property 'fontWeight', 'bold'
 
   it 'should set font style for italic title text', ->
     props = position: {}, font: {bold: false, italic: true}

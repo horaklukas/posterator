@@ -47,10 +47,8 @@ class EditableTitle extends React.Component
       color: '#' + font.color
       # TODO add vendor prefix variations of transform property
       transform: "rotate(#{angle}deg)"
-
-    styles.fontStyle =
-      if font.italic is true then 'italic'
-      else if font.bold then 'bold'
+      fontStyle: 'italic' if font.italic is true
+      fontWeight: 'bold' if font.bold
 
     classes = TITLE_CLASS
     classes += ' dragged' if @props.dragged
