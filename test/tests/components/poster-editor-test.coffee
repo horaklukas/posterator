@@ -1,16 +1,21 @@
 describe 'Component PosterEditor', ->
+  Editor = null
+
   before ->
     @editorStoreMock =
       isTitleDragged: sinon.stub()
       isTitleSelected: sinon.stub()
 
+    @actionsMock = selectTitle: sinon.spy()
+
     mockery.registerMock './editable-title', mockComponent 'titleMock'
     mockery.registerMock './toolbox', mockComponent 'toolboxMock'
     mockery.registerMock './canvas', mockComponent 'canvasMock'
     mockery.registerMock '../stores/editor-store', @editorStoreMock
+    mockery.registerMock '../actions/editor-actions-creators', @actionsMock
 
-    @Editor = require "../../../public/scripts/components/poster-editor"
-    @titles = [
+    Editor = require "../../../public/scripts/components/poster-editor"
+    @titlesData = [
       {
         position: {top: 170, left: 150}, text: 'Title 1 bottom', angle: 0, font: {
           size: 20, family: 'Verdana', bold: false, italic: false, color: '000'
@@ -24,15 +29,16 @@ describe 'Component PosterEditor', ->
     ]
     @props =
       poster: {width: 80, height: 96}
-      titles: @titles
+      titles: @titlesData
       selectedTitle: 1
 
-    @editor = TestUtils.renderIntoDocument React.createElement(@Editor, @props)
+    @editor = TestUtils.renderIntoDocument React.createElement(Editor, @props)
     @elem = TestUtils.findRenderedDOMComponentWithClass @editor, 'editor'
     @titles = TestUtils.scryRenderedDOMComponentsWithClass @editor, 'titleMock'
 
   beforeEach ->
     @editorStoreMock.isTitleDragged.reset()
+    @actionsMock.selectTitle.reset()
 
   after ->
     mockery.deregisterAll()
@@ -86,6 +92,28 @@ describe 'Component PosterEditor', ->
   it 'should create toolbox when selected title id exists', ->
     TestUtils.findRenderedDOMComponentWithClass @editor, 'toolboxMock'
 
+  it 'should create list of available titles if no title selected', ->
+    props = titles: @titlesData, selectedTitle: null, poster: @props.poster
+    editor = TestUtils.renderIntoDocument React.createElement(Editor, props)
+
+    list = TestUtils.findRenderedDOMComponentWithClass editor, 'titles-list'
+    titles = TestUtils.scryRenderedDOMComponentsWithClass list, 'title'
+
+    expect(titles).to.have.length 2
+    expect(titles[0].props.children).to.equal 'Title 1 bottom'
+    expect(titles[1].props.children).to.equal 'Title 2 top'
+
+  it 'should call selectTitle action when clicked link selector', ->
+    props = titles: @titlesData, selectedTitle: null, poster: @props.poster
+    editor = TestUtils.renderIntoDocument React.createElement(Editor, props)
+
+    list = TestUtils.findRenderedDOMComponentWithClass editor, 'titles-list'
+    titles = TestUtils.scryRenderedDOMComponentsWithClass list, 'title'
+
+    TestUtils.Simulate.click titles[1]
+
+    @actionsMock.selectTitle.should.been.calledOnce.and.calledWithExactly 1
+
   it 'should pass selected title data to toolbox', ->
     toolbox = TestUtils.findRenderedDOMComponentWithClass @editor, 'toolboxMock'
 
@@ -94,15 +122,3 @@ describe 'Component PosterEditor', ->
     expect(toolbox.props).to.have.property('font').that.eql {
       size: 16, family: 'Arial', bold: true, italic: false, color: 'f0f0f0'
     }
-
-  it 'should not create toolbox when selected title id not exists', ->
-    props =
-      titles: @titles
-      selectedTitle: null
-      poster: @props.poster
-
-    editor = TestUtils.renderIntoDocument React.createElement(@Editor, props)
-    elem = TestUtils.findRenderedDOMComponentWithClass editor, 'editor'
-
-    toolbox = TestUtils.scryRenderedDOMComponentsWithClass editor, 'toolboxMock'
-    expect(toolbox).to.have.length 0
