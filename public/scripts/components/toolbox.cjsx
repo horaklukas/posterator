@@ -17,14 +17,13 @@ class Toolbox extends React.Component
     actions.changeTitleAngle angle
 
   render: ->
-    styles = left: @props.left
     {fonts} = @props
     {family, size, bold, italic} = @props.font
-    console.log bold, italic
+
     fontSelector = if fonts
       <FontSelector fonts={fonts} selected={family} onChange={@handleFontChange} />
 
-    <div className="toolbox" style={styles}>
+    <div className="toolbox">
       <span className="label">Text</span>
       <input type="text" className="text" value={@props.text}
         onChange={@handleTextChange} />

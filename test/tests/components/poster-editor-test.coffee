@@ -58,6 +58,10 @@ describe 'Component PosterEditor', ->
       size: 16, family: 'Arial', bold: true, italic: false, color: 'f0f0f0'
     }
 
+  it 'should set panel left position to passed poster width', ->
+    panel = TestUtils.findRenderedDOMComponentWithClass @elem, 'panel'
+    expect(panel.props).to.have.deep.property 'style.left', 80
+
   it 'should set property dragged for each title', ->
     @editorStoreMock.isTitleDragged.withArgs(0).returns true
     @editorStoreMock.isTitleDragged.withArgs(1).returns false
@@ -90,11 +94,6 @@ describe 'Component PosterEditor', ->
     expect(toolbox.props).to.have.property('font').that.eql {
       size: 16, family: 'Arial', bold: true, italic: false, color: 'f0f0f0'
     }
-
-  it 'should set toolbox left position equal to poster width', ->
-    toolbox = TestUtils.findRenderedDOMComponentWithClass @elem, 'toolboxMock'
-
-    expect(toolbox.props).to.have.property 'left', 80
 
   it 'should not create toolbox when selected title id not exists', ->
     props =

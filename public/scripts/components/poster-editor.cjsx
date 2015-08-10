@@ -16,6 +16,7 @@ class Editor extends React.Component
 
   render: ->
     {poster, titles, selectedTitle, fonts} = @props
+    styles = left: poster.width
     titleToEdit = titles[selectedTitle] ? null
 
     Titles = _map titles, @createTitle
@@ -26,7 +27,9 @@ class Editor extends React.Component
     <div className="editor" style={height: poster.height} >
       <Canvas poster={poster} />
       {Titles}
-      {TitleToolbox}
+      <div className="panel" style={styles}>
+        {TitleToolbox}
+      </div>
     </div>
 
 module.exports = Editor

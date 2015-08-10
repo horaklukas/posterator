@@ -11,7 +11,6 @@ describe 'Component Toolbox', ->
     @constants = require '../../../public/scripts/constants/editor-constants'
     @Toolbox = require "../../../public/scripts/components/toolbox"
     @props =
-      left: 600
       text: 'Title text 1'
       titleAngle: 35
       font: {
@@ -26,10 +25,6 @@ describe 'Component Toolbox', ->
 
   after ->
     mockery.deregisterAll()
-
-  it 'should set toolbox to passed left position', ->
-
-    expect(@elem.props).to.have.deep.property 'style.left', 600
 
   it 'should show passed text at input', ->
     input = TestUtils.findRenderedDOMComponentWithClass @elem, 'text'
