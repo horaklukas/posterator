@@ -1,8 +1,8 @@
 AppDispatcher = require '../dispatcher/app-dispatcher'
-BaseStore = require './base-store'
+Store = require './store'
 constants = require '../constants/editor-constants'
 
-class EditorStore extends BaseStore
+class EditorStore extends Store
   constructor: ->
     @dragged = {}
     @dispatcherIndex = AppDispatcher.register @actionsHandler
@@ -28,7 +28,7 @@ class EditorStore extends BaseStore
       when constants.TITLE_UNSELECT then @selectedTitle = null
       else return # dont emit change since we didnt any change
 
-    @emit BaseStore.CHANGE_EVENT
+    @emit Store.CHANGE_EVENT
 
   getAvailableFonts: ->
     @fonts

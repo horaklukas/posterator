@@ -1,10 +1,10 @@
 AppDispatcher = require '../dispatcher/app-dispatcher'
-BaseStore = require './base-store'
+Store = require './store'
 EditorStore = require './editor-store'
 posterConstants = require '../constants/poster-constants'
 editorConstants = require '../constants/editor-constants'
 
-class PostersStore extends BaseStore
+class PostersStore extends Store
   constructor: ->
     @dispatcherIndex = AppDispatcher.register @actionsHandler
 
@@ -43,7 +43,7 @@ class PostersStore extends BaseStore
 
       else return # dont emit change since we didnt any change
 
-    @emit BaseStore.CHANGE_EVENT
+    @emit Store.CHANGE_EVENT
 
   getAllPosters: ->
     @posters ? null

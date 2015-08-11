@@ -2,6 +2,7 @@ React = require 'react'
 HorizontalSlider = require './horizontal-slider'
 FontSelector = require './font-selector'
 Checkbox = require './checkbox'
+ColorPicker = require './color-picker'
 
 actions = require '../actions/editor-actions-creators'
 constants = require '../constants/editor-constants'
@@ -16,9 +17,12 @@ class Toolbox extends React.Component
   handleChangeAngle: (name, angle) ->
     actions.changeTitleAngle angle
 
+  handleColorChange: (color) ->
+    actions.changeTitleFont 'color', color
+
   render: ->
     {fonts} = @props
-    {family, size, bold, italic} = @props.font
+    {family, size, bold, italic, color} = @props.font
 
     fontSelector = if fonts
       <FontSelector fonts={fonts} selected={family} onChange={@handleFontChange} />
@@ -35,11 +39,16 @@ class Toolbox extends React.Component
       <HorizontalSlider name="angle" value={@props.titleAngle} label="Text rotation"
           min={0} max={360} onChange={@handleChangeAngle} />
 
-      <Checkbox label="Bold" name="bold" checked={bold}
-        onChange={@handleFontChange} />
+      <div>
+        <Checkbox label="Bold" name="bold" checked={bold}
+          onChange={@handleFontChange} />
 
-      <Checkbox label="Italic" name="italic" checked={italic}
-        onChange={@handleFontChange} />
+        <Checkbox label="Italic" name="italic" checked={italic}
+          onChange={@handleFontChange} />
+      </div>
+
+      <ColorPicker color={color} label="Font color" onChange={@handleFontChange} />
+
     </div>
 
 module.exports = Toolbox

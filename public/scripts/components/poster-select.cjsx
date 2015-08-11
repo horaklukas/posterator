@@ -24,5 +24,4 @@ class Thumbnail extends React.Component
       <img src={@props.url} />
     </div>
 
-
 module.exports = PosterText

@@ -19,7 +19,7 @@ describe 'Component EditableTitle', ->
       position: {x: 136, y: 20}
       angle: 20
       text: 'This text is editable'
-      font: {family: 'Arial', size: 24, bold: true, italic: false, color: 'bbb'}
+      font: {family: 'Arial', size: 24, bold: true, italic: false, color: '#bbb'}
 
     @title = TestUtils.renderIntoDocument React.createElement(Title, @props)
     @elem = TestUtils.findRenderedDOMComponentWithClass @title, 'editable-title'

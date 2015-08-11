@@ -44,7 +44,7 @@ class EditableTitle extends React.Component
       left: position.x
       fontFamily: font.family
       fontSize: font.size
-      color: '#' + font.color
+      color: font.color
       # TODO add vendor prefix variations of transform property
       transform: "rotate(#{angle}deg)"
       fontStyle: 'italic' if font.italic is true

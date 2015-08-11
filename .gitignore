@@ -2,6 +2,7 @@ coverage/
 bower_components/
 node_modules/
 *.js
+!gulpfile.js
 *.log
 *.css
 
