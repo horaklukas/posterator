@@ -1,6 +1,6 @@
 describe 'Component FontSelector', ->
   before ->
-    FontSelector = require "../../../public/scripts/components/font-selector"
+    FontSelector = require "../../../public/scripts/components/toolbox/font-selector"
 
     @props =
       fonts: ['Font1', 'Font2', 'Font3']

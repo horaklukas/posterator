@@ -4,8 +4,8 @@ FontSelector = require './font-selector'
 Checkbox = require './checkbox'
 ColorPicker = require './color-picker'
 
-actions = require '../actions/editor-actions-creators'
-constants = require '../constants/editor-constants'
+actions = require '../../actions/editor-actions-creators'
+constants = require '../../constants/editor-constants'
 
 class Toolbox extends React.Component
   handleTextChange: (e) =>
@@ -47,7 +47,7 @@ class Toolbox extends React.Component
           onChange={@handleFontChange} />
       </div>
 
-      <ColorPicker color={color} label="Font color" onChange={@handleFontChange} />
+      <ColorPicker color={color} label="Font color" onChange={@handleColorChange} />
 
     </div>
 

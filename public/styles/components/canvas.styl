@@ -1,5 +1,16 @@
-/*
+@require 'nib'
+
 .canvas
+  position: relative
+
+  &.dragging-title
+    cursor: move
+
   img
+  canvas
+    absolute: top left
+  img
+    visibility: hidden
+
+  .editable-title
     display: none
-*/

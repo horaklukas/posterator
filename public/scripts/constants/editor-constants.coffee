@@ -11,3 +11,4 @@ module.exports =
   FONT_SIZE:
     MIN: 10
     MAX: 100
+  GENERATE_POSTER: 'generate-poster'

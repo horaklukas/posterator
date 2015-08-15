@@ -5,11 +5,11 @@ describe 'Component Toolbox', ->
       changeTitleFont: sinon.spy()
       changeTitleAngle: sinon.spy()
 
-    mockery.registerMock '../actions/editor-actions-creators', @actionsMock
+    mockery.registerMock '../../actions/editor-actions-creators', @actionsMock
     mockery.registerMock 'react-slider', mockComponent 'sliderMock'
 
     @constants = require '../../../public/scripts/constants/editor-constants'
-    @Toolbox = require "../../../public/scripts/components/toolbox"
+    @Toolbox = require "../../../public/scripts/components/toolbox/toolbox"
     @props =
       text: 'Title text 1'
       titleAngle: 35

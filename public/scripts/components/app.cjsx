@@ -4,8 +4,6 @@ Editor = require './poster-editor'
 PosterStore = require '../stores/poster-store'
 EditorStore = require '../stores/editor-store'
 
-_map = require 'lodash.map'
-
 getAppState = ->
 	posters: PosterStore.getAllPosters()
 	poster: PosterStore.getSelectedPoster()

@@ -1,4 +1,5 @@
 React = require 'react'
+_map = require 'lodash.map'
 
 class FontSelector extends React.Component
   handleChange: ({target}) =>
@@ -16,7 +17,7 @@ class FontSelector extends React.Component
     <div className="font-selector">
       <span className="label">Font family</span>
       <select value={@props.selected} onChange={@handleChange}>
-        {@props.fonts.map @createFontOption}
+        {_map @props.fonts, @createFontOption}
       </select>
     </div>
 

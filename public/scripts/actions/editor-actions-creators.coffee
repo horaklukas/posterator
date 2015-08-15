@@ -32,3 +32,6 @@ module.exports =
 
   changeTitleAngle: (angle) ->
     AppDispatcher.dispatch {type: constants.TITLE_ANGLE_CHANGED, angle: angle}
+
+  generatePoster: ->
+    AppDispatcher.dispatch {type: constants.GENERATE_POSTER}

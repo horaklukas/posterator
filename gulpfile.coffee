@@ -6,6 +6,7 @@ browserify = require 'browserify'
 source = require 'vinyl-source-stream'
 mocha = require 'gulp-mocha'
 nib = require 'nib'
+bootstrap = require 'bootstrap-styl'
 connect = require 'gulp-connect'
 watch = require 'gulp-watch'
 
@@ -48,8 +49,10 @@ gulp.task 'cjsx', ->
     #.pipe connect.reload()
 
 gulp.task 'stylus', ->
+  plugins = [nib(), bootstrap()]
+
   gulp.src(paths.stylus.main)
-    .pipe stylus({compile: false, use:[nib()]}).on 'error', handleError
+    .pipe stylus({compile: false, use: plugins}).on 'error', handleError
     .pipe gulp.dest(paths.stylus.dest)
     .pipe connect.reload()
 
@@ -65,6 +68,9 @@ gulp.task 'test', ->
   gulp.src([paths.test.src], {read: false})
     .pipe mocha(mochaOptions).on 'error', handleError
 
+gulp.task 'cjsx-test', ['cjsx'], ->
+  gulp.start ['test']
+
 gulp.task 'connect', ->
   connect.server {
     root: 'public'
@@ -72,6 +78,6 @@ gulp.task 'connect', ->
   }
 
 gulp.task 'watch', ['connect'], ->
-  watch paths.cjsx.src, -> gulp.start ['cjsx', 'test']
+  watch paths.cjsx.src, -> gulp.start ['cjsx-test']
   watch paths.stylus.src, -> gulp.start 'stylus'
   watch paths.test.src, -> gulp.start 'test'

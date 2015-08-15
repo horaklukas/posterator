@@ -33,4 +33,12 @@ EditorUtils =
       cb fontsList
     , 1000
 
+  generatePoster: ->
+    canvas = document.getElementById('result-poster')
+    data = canvas.toDataURL()
+
+    posterWindow = window.open("", "Result poster", "width=800, height=600");
+    posterWindow.document.write("<img src='#{data}' width='100%' height='100%' />");
+
+
 module.exports = EditorUtils
