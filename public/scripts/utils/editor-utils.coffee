@@ -34,11 +34,15 @@ EditorUtils =
     , 1000
 
   generatePoster: ->
-    canvas = document.getElementById('result-poster')
+    canvas = document.getElementById 'result-poster'
     data = canvas.toDataURL()
 
-    posterWindow = window.open("", "Result poster", "width=800, height=600");
-    posterWindow.document.write("<img src='#{data}' width='100%' height='100%' />");
+    width = canvas.getAttribute 'width'
+    height = canvas.getAttribute 'height'
+    windowAttributes = "width=#{width}, height=#{height}"
 
+    posterWindow = window.open '', 'Result poster', windowAttributes
+    posterWindow.document.write "<img src='#{data}' width='100%' height='100%' />"
+    posterWindow.document.body.style.setProperty 'margin', '0'
 
 module.exports = EditorUtils
