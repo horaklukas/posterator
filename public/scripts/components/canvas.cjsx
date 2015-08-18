@@ -29,18 +29,6 @@ class Canvas extends React.Component
 
     @setState titlesBBoxes: titlesBBoxes
 
-  ###
-  handleCanvasClick: (e) =>
-    {offsetX, offsetY} = e.nativeEvent
-
-    for id, bbox of @state.titlesBBoxes when bbox.contains(offsetX, offsetY)
-      return actions.selectTitle id
-
-    # no title clicked, so unselect actual selected title
-    selectedTitleId = EditorStore.getSelectedTitleId()
-    if selectedTitleId? then actions.unselectTitle selectedTitleId
-  ###
-
   handleMouseDown: (e) =>
     {offsetX, offsetY} = e.nativeEvent
 
@@ -83,12 +71,14 @@ class Canvas extends React.Component
     canvasClasses += ' dragging-title' if EditorStore.getDraggedTitleId()?
 
     <div className={canvasClasses}>
-      <img src={url} ref="image" width={width} height={height} />
+      <img src={url} ref="image" width={width} height={height}
+        onLoad={@handleImageLoad} />
       <canvas id="result-poster" ref="canvas" width={width} height={height}
         onClick={@handleCanvasClick}
         onMouseDown={@handleMouseDown}
         onMouseMove={@handleMove}
-        onMouseUp={@handleMouseUp}>
+        onMouseUp={@handleMouseUp}
+        onLoad={@handleImageLoad}>
       </canvas>
     </div>
 

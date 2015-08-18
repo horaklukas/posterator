@@ -47,7 +47,7 @@ describe 'PosterStore', ->
 
   it 'should save titles list when action TITLES_LOADED is invoked', ->
     titlesList = [{'f': 'faked'}, {'t': 'titles'}, {'l': 'list'}]
-    expect(@posterStore.getPosterTitles()).to.be.an('array').and.empty
+    expect(@posterStore.getPosterTitles()).to.be.null
 
     @actionHandler {type: @constants.TITLES_LOADED, titles: titlesList}
 

@@ -56,6 +56,21 @@ describe 'Component PosterEditor', ->
 
     TestUtils.findRenderedDOMComponentWithClass editor, 't-list'
 
+  it 'should not create panel content if no titles available', ->
+    props = titles: null, selectedTitle: null, poster: @props.poster
+    editor = TestUtils.renderIntoDocument React.createElement(Editor, props)
+    panel = TestUtils.findRenderedDOMComponentWithClass editor, 'panel'
+
+    expect(panel.props.children[1]).to.be.null
+    expect(panel.props.children[0].props.className).to.contain 'btn'
+
+  it 'should disable generate button when no titles available', ->
+    props = titles: null, selectedTitle: null, poster: @props.poster
+    editor = TestUtils.renderIntoDocument React.createElement(Editor, props)
+
+    btn = TestUtils.findRenderedDOMComponentWithClass editor, 'btn'
+    expect(btn.props).to.have.property 'disabled', true
+
   it 'should pass selected title data to toolbox', ->
     toolbox = TestUtils.findRenderedDOMComponentWithClass @editor, 'toolboxMock'
 

@@ -15,19 +15,21 @@ class Editor extends React.Component
   render: ->
     {poster, titles, selectedTitle, fonts} = @props
     styles = left: poster.width
-    titleToEdit = titles[selectedTitle] ? null
+    titleToEdit = titles?[selectedTitle] ? null
 
     panelContent =
       if titleToEdit? then @createToolbox titleToEdit, poster.width, fonts
-      else  <TitlesList titles={titles} />
+      else if titles? then <TitlesList titles={titles} />
+      else null
+
+    generateEnabled = titles?
 
     <div className="editor" style={height: poster.height} >
       <Canvas poster={poster} titles={titles} />
 
       <div className="panel" style={styles}>
-        <button className="btn btn-primary generate" onClick={@handleGenerate}>
-          Generate poster
-        </button>
+        <button className="btn btn-primary generate" disabled={!generateEnabled}
+          onClick={@handleGenerate}>Generate poster</button>
 
         {panelContent}
       </div>

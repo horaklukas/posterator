@@ -52,6 +52,6 @@ class PostersStore extends Store
     if @posters? and @selected? then @posters[@selected] else null
 
   getPosterTitles: ->
-    @titles ? []
+    @titles ? null
 
 module.exports = new PostersStore
