@@ -1,17 +1,8 @@
 AppDispatcher = require '../dispatcher/app-dispatcher'
 constants = require '../constants/editor-constants'
 WebFontLoader = require 'webfontloader'
-
-fontsList = [
-  'Arial'
-  'Times New Roman'
-  'Verdana'
-  'Roboto'
-  'Montserrat'
-  'Arimo'
-  'Droid Sans'
-  'Ubuntu'
-]
+#getJSON = require 'jquery-ajax-json'
+fontsList = require '../../fonts-list.json'
 
 EditorUtils =
   loadFonts: ->
@@ -29,9 +20,8 @@ EditorUtils =
       WebFontLoader.load(WebFontConfig)
 
   getFontsList: (cb) ->
-    setTimeout ->
-      cb fontsList
-    , 1000
+    #getJSON('./fonts-list.json').then cb, (err) -> console.log 'Failed to load fonts'
+    cb fontsList.sort()
 
   generatePoster: ->
     canvas = document.getElementById 'result-poster'
