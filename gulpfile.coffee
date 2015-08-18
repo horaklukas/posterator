@@ -1,45 +1,83 @@
 gulp = require 'gulp'
 gutil = require 'gulp-util'
-coffee = require 'gulp-coffee'
 cjsx = require 'gulp-cjsx'
-browserify = require 'gulp-browserify'
-rename = require 'gulp-rename'
+stylus = require 'gulp-stylus'
+browserify = require 'browserify'
+source = require 'vinyl-source-stream'
+mocha = require 'gulp-mocha'
+nib = require 'nib'
+bootstrap = require 'bootstrap-styl'
 connect = require 'gulp-connect'
+watch = require 'gulp-watch'
 
 paths =
-	coffee: './public/scripts/**/*.coffee'
-	cjsx: './public/scripts/**/*.cjsx'
-	scripts: './public/scripts'
+  cjsx:
+    src: [
+      'public/scripts/**/*.cjsx'
+      'public/scripts/**/*.coffee'
+    ]
+    dest: 'public/scripts/'
+  stylus:
+    src: 'public/styles/**/*.styl'
+    main: 'public/styles/index.styl'
+    dest: 'public/styles/'
+  build:
+    bundle: 'posterator.js'
+    dest: 'public/scripts'
+  test:
+    src: 'test/tests/**/*-test.coffee'
 
-gulp.task 'coffee', ->
-	gulp.src(paths.coffee)
-		.pipe(coffee({bare: true})).on('error', gutil.log)
-		.pipe gulp.dest(paths.scripts)
+browserifyConfig =
+  entries: ['./public/scripts/index.js']
+  debug: true
+
+mochaOptions =
+  reporter: 'spec'
+  globals: ['sinon', 'expect', 'mockery']
+  bail: true
+
+handleError = (err) ->
+  gutil.log gutil.colors.red err
+  @emit 'end'
+
+gulp.task 'default', ['cjsx', 'stylus']
 
 gulp.task 'cjsx', ->
-	gulp.src(paths.cjsx)
-		.pipe(cjsx({bare: true})).on('error', gutil.log)
-		.pipe gulp.dest(paths.scripts)
+  gulp.src(paths.cjsx.src)
+    .pipe cjsx({bare: true}).on 'error', handleError
+    .pipe gulp.dest(paths.cjsx.dest)
+    #.pipe connect.reload()
 
-gulp.task 'browserify', ->
-	gulp.src('./public/scripts/index.js')
-		.pipe(browserify())
-		.pipe(rename('bundle.js'))
-		.pipe(gulp.dest(paths.scripts))
-		.pipe(connect.reload())
+gulp.task 'stylus', ->
+  plugins = [nib(), bootstrap()]
 
-gulp.task 'default', ['coffee', 'cjsx', 'browserify']
+  gulp.src(paths.stylus.main)
+    .pipe stylus({compile: false, use: plugins}).on 'error', handleError
+    .pipe gulp.dest(paths.stylus.dest)
+    .pipe connect.reload()
+
+gulp.task 'build', ['cjsx'], ->
+  browserify(browserifyConfig)
+    .bundle()
+    .pipe source(paths.build.bundle)
+    .pipe gulp.dest(paths.build.dest)
+
+gulp.task 'test', ->
+  require './test/test-assets'
+
+  gulp.src([paths.test.src], {read: false})
+    .pipe mocha(mochaOptions).on 'error', handleError
+
+gulp.task 'cjsx-test', ['cjsx'], ->
+  gulp.start ['test']
 
 gulp.task 'connect', ->
   connect.server {
-    root: 'public/scripts'
+    root: 'public'
     livereload: true
   }
 
 gulp.task 'watch', ['connect'], ->
-	gulp.watch paths.coffee, ['coffee']
-	gulp.watch paths.cjsx, ['cjsx']
-	gulp.watch(
-		['./public/scripts/**/*.js','!./public/scripts/bundle.js']
-		['browserify']
-	)
+  watch paths.cjsx.src, -> gulp.start ['cjsx-test']
+  watch paths.stylus.src, -> gulp.start 'stylus'
+  watch paths.test.src, -> gulp.start 'test'

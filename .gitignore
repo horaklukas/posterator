@@ -1,4 +1,9 @@
-bower_components
-node_modules
+coverage/
+bower_components/
+node_modules/
 *.js
 !gulpfile.js
+*.log
+*.css
+
+__tests__/

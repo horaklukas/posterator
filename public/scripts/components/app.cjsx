@@ -1,62 +1,42 @@
 React = require 'react'
-Fluxxor = require 'fluxxor'
-FluxMixin = Fluxxor.FluxMixin React
-StoreWatchMixin = Fluxxor.StoreWatchMixin
-TitleEdit = require './title'
-Canvas = require './canvas'
+PosterSelect = require './poster-select'
+Editor = require './poster-editor'
+PosterStore = require '../stores/poster-store'
+EditorStore = require '../stores/editor-store'
 
-module.exports = App = React.createClass
-	mixins: [
-		FluxMixin
-		StoreWatchMixin('TitlesStore')
-	]
+getAppState = ->
+	posters: PosterStore.getAllPosters()
+	poster: PosterStore.getSelectedPoster()
+	titles: PosterStore.getPosterTitles()
+	selectedTitle: EditorStore.getSelectedTitleId()
+	fonts: EditorStore.getAvailableFonts()
 
-	createTitle: (title, idx) ->
-		<TitleEdit
-			top={title.y} left={title.x}
-			width={title.w} height={title.h}
-			text={title.text}
-			size={title.size}
-			font={title.font}
-			bold={title.bold}
-			italic={title.italic}
-			key={idx}
-			editing={@state.editingTitle is idx}
-			onEditModeActivate={@editModeActivate} />
+class App extends React.Component
+	constructor: (props) ->
+		super props
 
-	###*
-  * @param {boolean} activate If edit mode activate or deactivate
-  * @param {?number} titleId Index of title that will be edited
-	###
-	editModeActivate: (activate, titleId) ->
-		@setState editingTitle: if activate then titleId else null
+		@state = getAppState()
 
-	onOverlayClick: ->
-		if @state.editingTitle? then @setState editingTitle: null
+	_onChange: =>
+		@setState getAppState()
 
-	getStateFromFlux: ->
-		flux = @getFlux()
+	componentWillMount: ->
+		PosterStore.addChangeListener @_onChange
+		EditorStore.addChangeListener @_onChange
 
-		poster: flux.store('PostersStore').getPoster()
-		titles: flux.store('TitlesStore').getTitles()
-
-	getInitialState: ->
-		editingTitle: null
+	componentWillUmount: ->
+		PosterStore.removeChangeListener @_onChange
+		EditorStore.removeChangeListener @_onChange
 
 	render: ->
-		{w, h, url} = @state.poster
-		overlayStyles =
-			backgroundColor: 'black'
-			position: 'fixed'
-			top: 0
-			right: 0
-			bottom: 0
-			left: 0
-			opacity: 0.7
-			display: if @state.editingTitle? then 'block' else 'none'
+		{poster, titles, fonts, selectedTitle, posters} = @state
+		Content =
+			if poster?
+				<Editor poster={poster} titles={titles} selectedTitle={selectedTitle}
+					fonts={fonts} />
+			else
+				<PosterSelect posters={posters} />
 
-		<div>
-			<Canvas width={w} height={h} url={url} />
-			<div style={overlayStyles} onClick={@onOverlayClick} />
-			{@state.titles.map @createTitle}
-		</div>
+		<div>{Content}</div>
+
+module.exports = App
