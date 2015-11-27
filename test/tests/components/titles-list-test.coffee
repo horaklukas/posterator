@@ -1,8 +1,8 @@
 describe 'TitlesList', ->
   List = null
 
-  before ->
-    @actionsMock = selectTitle: sinon.spy()
+  beforeAll ->
+    @actionsMock = selectTitle: jasmine.createSpy()
 
     mockery.registerMock '../../actions/editor-actions-creators', @actionsMock
 
@@ -22,9 +22,9 @@ describe 'TitlesList', ->
     @props = titles: @titlesData
 
   beforeEach ->
-    @actionsMock.selectTitle.reset()
+    @actionsMock.selectTitle.calls.reset()
 
-  after ->
+  afterAll ->
     mockery.deregisterAll()
 
   it 'should create list of available titles', ->
@@ -33,9 +33,9 @@ describe 'TitlesList', ->
 
     titles = TestUtils.scryRenderedDOMComponentsWithClass list, 'title'
 
-    expect(titles).to.have.length 2
-    expect(titles[0].props.children).to.equal 'Title 1 bottom'
-    expect(titles[1].props.children).to.equal 'Title 2 top'
+    expect(titles.length).toEqual 2
+    expect(titles[0].props.children).toEqual 'Title 1 bottom'
+    expect(titles[1].props.children).toEqual 'Title 2 top'
 
   it 'should call selectTitle action when clicked title selector', ->
     props = titles: @titlesData
@@ -45,4 +45,5 @@ describe 'TitlesList', ->
 
     TestUtils.Simulate.click titles[1]
 
-    @actionsMock.selectTitle.should.been.calledOnce.and.calledWithExactly 1
+    expect(@actionsMock.selectTitle.calls.count()).toEqual 1
+    expect(@actionsMock.selectTitle.calls.argsFor(0)).toEqual [1]

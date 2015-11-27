@@ -1,9 +1,9 @@
 describe 'Component Toolbox', ->
-  before ->
+  beforeAll ->
     @actionsMock =
-      changeTitleText: sinon.spy()
-      changeTitleFont: sinon.spy()
-      changeTitleAngle: sinon.spy()
+      changeTitleText: jasmine.createSpy()
+      changeTitleFont: jasmine.createSpy()
+      changeTitleAngle: jasmine.createSpy()
 
     mockery.registerMock '../../actions/editor-actions-creators', @actionsMock
     mockery.registerMock 'react-slider', mockComponent 'sliderMock'
@@ -21,71 +21,70 @@ describe 'Component Toolbox', ->
     @elem = TestUtils.findRenderedDOMComponentWithClass @tbox, 'toolbox'
 
   beforeEach ->
-    @actionsMock.changeTitleText.reset()
+    @actionsMock.changeTitleText.calls.reset()
 
-  after ->
+  afterAll ->
     mockery.deregisterAll()
 
   it 'should show passed text at input', ->
     input = TestUtils.findRenderedDOMComponentWithClass @elem, 'text'
 
-    expect(input.props).to.have.property 'value', 'Title text 1'
+    expect(input.props.value).toEqual 'Title text 1'
 
   it 'should call changeTitle callback when text changed', ->
     input = TestUtils.findRenderedDOMComponentWithClass @elem, 'text'
     TestUtils.Simulate.change input, {target: value: 'Title text 1 extended'}
 
-    @actionsMock.changeTitleText.should.been.calledOnce.and.calledWithExactly(
-      'Title text 1 extended'
+    expect(@actionsMock.changeTitleText.calls.count()).toEqual 1
+    expect(@actionsMock.changeTitleText.calls.argsFor(0)).toEqual(
+      ['Title text 1 extended']
     )
 
   describe 'Font slider', ->
     beforeEach ->
       [@container] = TestUtils.scryRenderedDOMComponentsWithClass @elem, 'slider-container'
       @slider = TestUtils.findRenderedDOMComponentWithClass @container, 'sliderMock'
-      @actionsMock.changeTitleFont.reset()
+      @actionsMock.changeTitleFont.calls.reset()
 
     it 'should have label as a first child inside container', ->
       label = TestUtils.findRenderedDOMComponentWithClass @container, 'label'
-      expect(label.getDOMNode().textContent).to.equal 'Font size'
+      expect(label.getDOMNode().textContent).toEqual 'Font size'
 
     it 'should have constant min and max equal to defined constants', ->
-      expect(@slider.props).to.have.property 'min', @constants.FONT_SIZE.MIN
-      expect(@slider.props).to.have.property 'max', @constants.FONT_SIZE.MAX
+      expect(@slider.props.min).toEqual @constants.FONT_SIZE.MIN
+      expect(@slider.props.max).toEqual @constants.FONT_SIZE.MAX
 
     it 'should set actual value', ->
-      expect(@slider.props).to.have.property 'value', 20
+      expect(@slider.props.value).toEqual 20
 
     it 'should call changeTitleFont with name "size" and value when changed', ->
       callback = @slider.props.onChange
       callback(30)
 
-      @actionsMock.changeTitleFont.should.been.calledOnce
-      @actionsMock.changeTitleFont.should.been.calledWithExactly(
-        'size', 30
-      )
+      expect(@actionsMock.changeTitleFont.calls.count()).toEqual 1
+      expect(@actionsMock.changeTitleFont.calls.argsFor(0)).toEqual ['size', 30]
 
-  describe 'Font slider', ->
+  describe 'Text rotator', ->
     beforeEach ->
       containers = TestUtils.scryRenderedDOMComponentsWithClass @elem, 'slider-container'
       @container = containers[1]
       @slider = TestUtils.findRenderedDOMComponentWithClass @container, 'sliderMock'
-      @actionsMock.changeTitleAngle.reset()
+      @actionsMock.changeTitleAngle.calls.reset()
 
     it 'should have label as a first child inside container', ->
       label = TestUtils.findRenderedDOMComponentWithClass @container, 'label'
-      expect(label.getDOMNode().textContent).to.equal 'Text rotation'
+      expect(label.getDOMNode().textContent).toEqual 'Text rotation'
 
     it 'should have range defined from 0 to 360', ->
-      expect(@slider.props).to.have.property 'min', 0
-      expect(@slider.props).to.have.property 'max', 360
+      expect(@slider.props.min).toEqual 0
+      expect(@slider.props.max).toEqual 360
 
     it 'should set title angle as a actual value', ->
-      expect(@slider.props).to.have.property 'value', 35
+      expect(@slider.props.value).toEqual 35
 
     it 'should call changeTitleAngle with angle value when changed', ->
       callback = @slider.props.onChange
       callback(38)
 
-      @actionsMock.changeTitleAngle.should.been.calledOnce
-      @actionsMock.changeTitleAngle.should.been.calledWithExactly 38
+      expect(@actionsMock.changeTitleAngle.calls.count()).toEqual 1
+      expect(@actionsMock.changeTitleAngle.calls.argsFor(0)).toEqual [38]

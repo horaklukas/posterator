@@ -1,20 +1,20 @@
 describe 'Component Canvas', ->
   Canvas = null
 
-  before ->
+  beforeAll ->
     @editorStoreMock =
-      getDraggedTitleId: sinon.stub()
-      getSelectedTitleId: sinon.stub()
+      getDraggedTitleId: jasmine.createSpy()
+      getSelectedTitleId: jasmine.createSpy()
 
-    @canvasUtilsMock = drawTitleOnCanvas: sinon.stub()
+    @canvasUtilsMock = drawTitleOnCanvas: jasmine.createSpy()
     @actionsMock =
-      selectTitle: sinon.spy()
-      unselectTitle: sinon.spy()
-      startTitleMove: sinon.spy()
-      titleMove: sinon.spy()
-      stopTitleMove: sinon.spy()
+      selectTitle: jasmine.createSpy()
+      unselectTitle: jasmine.createSpy()
+      startTitleMove: jasmine.createSpy()
+      titleMove: jasmine.createSpy()
+      stopTitleMove: jasmine.createSpy()
 
-    @domEventsMock = on: sinon.spy(), off: sinon.spy(), once: sinon.spy()
+    @domEventsMock = on: jasmine.createSpy(), off: jasmine.createSpy(), once: jasmine.createSpy()
 
     mockery.registerMock '../stores/editor-store', @editorStoreMock
     mockery.registerMock '../utils/canvas-utils', @canvasUtilsMock
@@ -42,109 +42,117 @@ describe 'Component Canvas', ->
     @canvas = TestUtils.renderIntoDocument React.createElement(Canvas, @props)
 
     # fake canvas `getContext` method that is not available at used jsdom
-    @ctx = drawImage: sinon.spy()
-    @canvas.refs.canvas.getDOMNode().getContext = sinon.stub().returns @ctx
+    @ctx = drawImage: jasmine.createSpy()
+    @canvas.refs.canvas.getDOMNode().getContext =
+      jasmine.createSpy().and.returnValue @ctx
     @elem = @canvas.refs.canvas
 
   beforeEach ->
-    @domEventsMock.on.reset()
-    @domEventsMock.off.reset()
-    @canvasUtilsMock.drawTitleOnCanvas.reset()
-    @actionsMock.selectTitle.reset()
-    @actionsMock.unselectTitle.reset()
-    @actionsMock.startTitleMove.reset()
-    @actionsMock.titleMove.reset()
-    @actionsMock.stopTitleMove.reset()
+    @domEventsMock.on.calls.reset()
+    @domEventsMock.off.calls.reset()
+    @canvasUtilsMock.drawTitleOnCanvas.calls.reset()
+    @actionsMock.selectTitle.calls.reset()
+    @actionsMock.unselectTitle.calls.reset()
+    @actionsMock.startTitleMove.calls.reset()
+    @actionsMock.titleMove.calls.reset()
+    @actionsMock.stopTitleMove.calls.reset()
 
-  after ->
+  afterAll ->
     @canvas.refs.canvas.getDOMNode().getContext = null
 
   it 'should create all next props titles', ->
     @canvas.componentWillReceiveProps @props
-    expect(@canvasUtilsMock.drawTitleOnCanvas).to.been.calledTwice
+    expect(@canvasUtilsMock.drawTitleOnCanvas.calls.count()).toEqual 2
 
   it 'should create all titles at canvas context with title\'s data', ->
     @canvas.componentWillReceiveProps @props
 
-    expect(@canvasUtilsMock.drawTitleOnCanvas.firstCall).to.been.calledWith @ctx
-    expect(@canvasUtilsMock.drawTitleOnCanvas.firstCall.args[1]).to.eql @titlesData[0]
+    drawTitleOnCanvasCalls = @canvasUtilsMock.drawTitleOnCanvas.calls.all()
+    expect(drawTitleOnCanvasCalls[0].args[0]).toEqual @ctx
+    expect(drawTitleOnCanvasCalls[0].args[1]).toEqual @titlesData[0]
 
-    expect(@canvasUtilsMock.drawTitleOnCanvas.secondCall).to.been.calledWith @ctx
-    expect(@canvasUtilsMock.drawTitleOnCanvas.secondCall.args[1]).to.eql @titlesData[1]
+    expect(drawTitleOnCanvasCalls[1].args[0]).toEqual @ctx
+    expect(drawTitleOnCanvasCalls[1].args[1]).toEqual @titlesData[1]
 
   describe 'mousedown', ->
     beforeEach ->
       @bboxes = [
-        {contains: sinon.stub().returns false}
-        {contains: sinon.stub().returns false}
+        {contains: jasmine.createSpy().and.returnValue false}
+        {contains: jasmine.createSpy().and.returnValue false}
       ]
       @canvas.setState titlesBBoxes: @bboxes
 
     it 'should create startTitleMove action with id when title mouse down', ->
-      @bboxes[1].contains.withArgs(230, 78).returns true
+      @bboxes[1].contains.and.returnValue true
 
       TestUtils.Simulate.mouseDown @elem, {
         clientX: 260, clientY: 130, nativeEvent: {offsetX: 230, offsetY: 78}
       }
 
-      @actionsMock.startTitleMove.should.been.calledOnce.and.calledWithExactly(
-        1, 260, 130, 200, 46
+      expect(@bboxes[1].contains).toHaveBeenCalledWith 230, 78
+      expect(@actionsMock.startTitleMove.calls.count()).toEqual 1
+      expect(@actionsMock.startTitleMove.calls.argsFor(0)).toEqual(
+        [1, 260, 130, 200, 46]
       )
 
     it 'should create selectTitle action with id when title mouse down', ->
-      @bboxes[1].contains.withArgs(230, 78).returns true
+      @bboxes[1].contains.and.returnValue true
 
       TestUtils.Simulate.mouseDown @elem, {
         clientX: 260, clientY: 130, nativeEvent: {offsetX: 230, offsetY: 78}
       }
-
-      @actionsMock.selectTitle.should.been.calledOnce.and.calledWithExactly 1
+      expect(@bboxes[1].contains).toHaveBeenCalledWith 230, 78
+      expect(@actionsMock.selectTitle.calls.count()).toEqual 1
+      expect(@actionsMock.selectTitle.calls.argsFor(0)).toEqual [1]
 
     it 'should unselect selected title when clicked to canvas not title', ->
-      @editorStoreMock.getSelectedTitleId.returns 0
+      @editorStoreMock.getSelectedTitleId.and.returnValue 0
 
       TestUtils.Simulate.mouseDown @elem, {
         clientX: 260, clientY: 130, nativeEvent: {offsetX: 230, offsetY: 78}
       }
 
-      @actionsMock.unselectTitle.should.been.calledOnce.and.calledWithExactly 0
+      expect(@actionsMock.unselectTitle.calls.count()).toEqual 1
+      expect(@actionsMock.unselectTitle.calls.argsFor(0)).toEqual [0]
 
     it 'should listen for mouse events over document when mousedown', ->
-      @bboxes[1].contains.withArgs(230, 78).returns true
+      @bboxes[1].contains.and.returnValue true
 
       TestUtils.Simulate.mouseDown @elem, {
         clientX: 260, clientY: 130, nativeEvent: {offsetX: 230, offsetY: 78}
       }
 
-      @domEventsMock.on.should.been.calledTwice
-      @domEventsMock.on.firstCall.should.been.calledWithExactly(
-        document, 'mousemove', @canvas.handleMove
+      expect(@bboxes[1].contains).toHaveBeenCalledWith(230, 78)
+      expect(@domEventsMock.on.calls.count()).toEqual 2
+      expect(@domEventsMock.on.calls.argsFor(0)).toEqual(
+        [document, 'mousemove', @canvas.handleMove]
       )
-      @domEventsMock.on.secondCall.should.been.calledWithExactly(
-        document, 'mouseup',  @canvas.handleMouseUp
+      expect(@domEventsMock.on.calls.argsFor(1)).toEqual(
+        [document, 'mouseup',  @canvas.handleMouseUp]
       )
 
-  describe 'mousedown', ->
+  describe 'mouseup', ->
     it 'should create stopTitleMove action with title id when mouse up', ->
-      @editorStoreMock.getDraggedTitleId.returns 8
+      @editorStoreMock.getDraggedTitleId.and.returnValue 8
       TestUtils.Simulate.mouseUp @elem
 
-      @actionsMock.stopTitleMove.should.been.calledOnce.and.calledWithExactly 8
+      expect(@actionsMock.stopTitleMove.calls.count()).toEqual 1
+      expect(@actionsMock.stopTitleMove.calls.argsFor(0)).toEqual [8]
 
     it 'should not create stopTitleMove action if dragged title id is falsy', ->
-      @editorStoreMock.getDraggedTitleId.returns null
+      @editorStoreMock.getDraggedTitleId.and.returnValue null
       TestUtils.Simulate.mouseUp @elem
 
-      @actionsMock.stopTitleMove.should.not.been.called
+      expect(@actionsMock.stopTitleMove).not.toHaveBeenCalled
 
     it 'should unlisten for mouse events over document when mouseup', ->
-      @editorStoreMock.getDraggedTitleId.returns 3
+      @editorStoreMock.getDraggedTitleId.and.returnValue 3
       TestUtils.Simulate.mouseUp @elem, {clientX: 60, clientY: 30}
 
-      @domEventsMock.off.should.been.calledTwice
-      @domEventsMock.off.firstCall.should.been.calledWithExactly(
-        document, 'mousemove', @canvas.handleMove
+      expect(@domEventsMock.off.calls.count()).toEqual 2
+      expect(@domEventsMock.off.calls.argsFor(0)).toEqual(
+        [document, 'mousemove', @canvas.handleMove]
       )
-      @domEventsMock.off.secondCall.should.been.calledWithExactly(
-        document, 'mouseup',  @canvas.handleMouseUp
+      expect(@domEventsMock.off.calls.argsFor(1)).toEqual(
+        [document, 'mouseup',  @canvas.handleMouseUp]
       )

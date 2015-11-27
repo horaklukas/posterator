@@ -1,17 +1,17 @@
 describe 'Component App', ->
-  before ->
+  beforeAll ->
     @posterStoreMock =
-      getAllPosters: sinon.stub()
-      getSelectedPoster: sinon.stub()
-      getPosterTitles: sinon.stub()
-      addChangeListener: sinon.spy()
-      removeChangeListener: sinon.spy()
+      getAllPosters: jasmine.createSpy()
+      getSelectedPoster: jasmine.createSpy()
+      getPosterTitles: jasmine.createSpy()
+      addChangeListener: jasmine.createSpy()
+      removeChangeListener: jasmine.createSpy()
 
     @editorStoreMock =
-      addChangeListener: sinon.spy()
-      removeChangeListener: sinon.spy()
-      getSelectedTitleId: sinon.stub()
-      getAvailableFonts: sinon.stub()
+      addChangeListener: jasmine.createSpy()
+      removeChangeListener: jasmine.createSpy()
+      getSelectedTitleId: jasmine.createSpy()
+      getAvailableFonts: jasmine.createSpy()
 
     mockery.registerMock './poster-editor', mockComponent 'editorMock'
     mockery.registerMock './poster-select', mockComponent 'posterSelectMock'
@@ -26,47 +26,51 @@ describe 'Component App', ->
       ]
 
     @app = TestUtils.renderIntoDocument React.createElement(App, @props)
-    @changeCb = @posterStoreMock.addChangeListener.lastCall?.args[0]
+    @changeCb = @posterStoreMock.addChangeListener.calls.mostRecent()?.args[0]
 
-  after ->
+  afterAll ->
     mockery.deregisterAll()
 
   it 'should listen all stores for change', ->
-    @posterStoreMock.addChangeListener.should.been.calledOnce
-    @posterStoreMock.addChangeListener.lastCall.args[0].should.be.a 'function'
-    @editorStoreMock.addChangeListener.should.been.calledOnce
-    @editorStoreMock.addChangeListener.lastCall.args[0].should.be.a 'function'
+    expect(@posterStoreMock.addChangeListener.calls.count()).toEqual 1
+    expect(@posterStoreMock.addChangeListener.calls.mostRecent().args[0]).toEqual(
+      jasmine.any(Function)
+    )
+    expect(@editorStoreMock.addChangeListener.calls.count()).toEqual 1
+    expect(@editorStoreMock.addChangeListener.calls.mostRecent().args[0]).toEqual(
+      jasmine.any(Function)
+    )
 
   it 'should render posters list when selected poster is null', ->
-    @posterStoreMock.getSelectedPoster.returns null
+    @posterStoreMock.getSelectedPoster.and.returnValue null
 
     @changeCb()
 
     TestUtils.findRenderedDOMComponentWithClass @app, 'posterSelectMock'
     editor = TestUtils.scryRenderedDOMComponentsWithClass(@app, 'editorMock')
-    expect(editor).to.have.length 0
+    expect(editor.length).toEqual 0
 
   it 'should render poster editor when selected poster is defined', ->
-    @posterStoreMock.getSelectedPoster.returns {url: './image.png', name: 'Nm'}
+    @posterStoreMock.getSelectedPoster.and.returnValue {url: './image.png', name: 'Nm'}
 
     @changeCb()
 
     TestUtils.findRenderedDOMComponentWithClass @app, 'editorMock'
     select = TestUtils.scryRenderedDOMComponentsWithClass(@app, 'posterSelectMock')
-    expect(select).to.have.length 0
+    expect(select.length).toEqual 0
 
   it 'should pass poster and its titles to editor component', ->
     poster = {url: './poster.png', name: 'Poster 1'}
     titles = [{'one': 1}, {'two': 2}, {'three': 3}, {'four': 4}]
 
-    @posterStoreMock.getSelectedPoster.returns poster
-    @posterStoreMock.getPosterTitles.returns titles
+    @posterStoreMock.getSelectedPoster.and.returnValue poster
+    @posterStoreMock.getPosterTitles.and.returnValue titles
 
     @changeCb()
 
     editor = TestUtils.findRenderedDOMComponentWithClass @app, 'editorMock'
 
-    expect(editor.props).to.have.property('poster').that.eql poster
-    expect(editor.props).to.have.property('titles').that.eql titles
+    expect(editor.props.poster).toEqual poster
+    expect(editor.props.titles).toEqual titles
 
 
