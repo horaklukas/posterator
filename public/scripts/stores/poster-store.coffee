@@ -3,8 +3,15 @@ Store = require './store'
 EditorStore = require './editor-store'
 posterConstants = require '../constants/poster-constants'
 editorConstants = require '../constants/editor-constants'
+_clone = require 'lodash.clone'
 
 class PostersStore extends Store
+  @NEW_TITLE:
+    position: {x: 10, y: 10}
+    angle: 0,
+    text: 'Title',
+    font: {size: 15, family: 'Arial', color: '#000000', italic: false, bold: false}
+
   constructor: ->
     @dispatcherIndex = AppDispatcher.register @actionsHandler
 
@@ -40,6 +47,9 @@ class PostersStore extends Store
         titleId = EditorStore.getSelectedTitleId()
 
         @titles[titleId].angle = payload.angle
+
+      when posterConstants.ADD_NEW_TITLE
+        @titles.push _clone(PostersStore.NEW_TITLE)
 
       else return # dont emit change since we didnt any change
 

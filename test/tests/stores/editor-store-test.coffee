@@ -3,7 +3,9 @@ describe 'EditorStore', ->
     @dispatcherMock = register: jasmine.createSpy('register')
 
     mockery.registerMock '../dispatcher/app-dispatcher', @dispatcherMock
+
     @editorStore = require '../../../public/scripts/stores/editor-store'
+
     @constants = require '../../../public/scripts/constants/editor-constants'
     @actionHandler = @dispatcherMock.register.calls.mostRecent()?.args[0]
 

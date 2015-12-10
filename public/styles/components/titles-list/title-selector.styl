@@ -1,0 +1,14 @@
+span
+  background-color: white
+  width: 100%
+  padding: 2% 3%
+  display: inline-block
+  box-sizing: border-box
+  border-bottom: 1px solid #777
+  cursor: pointer
+
+  &:first-child
+    border-top: @border-bottom
+
+  &:hover
+    background-color: darken(@background-color, 30%)

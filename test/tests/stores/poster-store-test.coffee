@@ -12,7 +12,9 @@ describe 'PosterStore', ->
 
     mockery.registerMock './editor-store', @editorStoreMock
     mockery.registerMock '../dispatcher/app-dispatcher', @dispatcherMock
+
     @posterStore = require '../../../public/scripts/stores/poster-store'
+
     @constants = require '../../../public/scripts/constants/poster-constants'
     @constants2 = require '../../../public/scripts/constants/editor-constants'
     @actionHandler = @dispatcherMock.register.calls.mostRecent()?.args[0]
@@ -127,6 +129,26 @@ describe 'PosterStore', ->
     actualTitles = @posterStore.getPosterTitles()
     expect(actualTitles[1].angle).toEqual 233
 
+  it 'should add new empty title when action ADD_NEW_TITLE is invoked', ->
+    titles = [ { angle: 168 }, { angle: 230}  ]
+
+    @actionHandler {type: @constants.TITLES_LOADED, titles: titles}
+
+    actualTitles = @posterStore.getPosterTitles()
+    expect(actualTitles.length).toEqual 2
+
+    @actionHandler {type: @constants.ADD_NEW_TITLE}
+
+    actualTitles = @posterStore.getPosterTitles()
+
+    expect(actualTitles.length).toEqual 3
+    expect(actualTitles[2]).toEqual {
+      position: {x: 10, y: 10}
+      angle: 0,
+      text: 'Title',
+      font: {size: 15, family: 'Arial', color: '#000000', italic: false, bold: false}
+    }
+
   it 'should emit change event for known actions', ->
     @editorStoreMock.getSelectedTitleId.and.returnValue 0
 
@@ -152,6 +174,9 @@ describe 'PosterStore', ->
 
     @actionHandler {type: @constants2.TITLE_ANGLE_CHANGED, angle: 12}
     expect(@posterStore.emit.calls.count()).toEqual 7
+
+    @actionHandler {type: @constants.ADD_NEW_TITLE}
+    expect(@posterStore.emit.calls.count()).toEqual 8
 
   it 'should not emit change event for unknown actions', ->
     @actionHandler {type: @constants.UNKNOWN_ACTION, posters: []}
