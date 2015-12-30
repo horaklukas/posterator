@@ -13,7 +13,7 @@ class Editor extends React.Component
       titleAngle={title.angle} fonts={fonts} />
 
   render: ->
-    {poster, titles, selectedTitle, fonts} = @props
+    {poster, titles, selectedTitle, hoveredTitle, fonts} = @props
     styles = left: poster.width
     titleToEdit = titles?[selectedTitle] ? null
 
@@ -25,7 +25,7 @@ class Editor extends React.Component
     generateEnabled = titles?
 
     <div className="editor" style={height: poster.height} >
-      <Canvas poster={poster} titles={titles} />
+      <Canvas poster={poster} titles={titles} hoveredTitle={hoveredTitle} />
 
       <div className="panel" style={styles}>
         <button className="btn btn-primary generate" disabled={!generateEnabled}

@@ -13,16 +13,17 @@ class Canvas extends React.Component
     @state = titlesBBoxes: []
 
   componentWillReceiveProps: (nextProps) ->
-    @redrawCanvas nextProps.titles
+    @redrawCanvas nextProps.titles, nextProps.hoveredTitle
 
-  redrawCanvas: (titles) =>
+  redrawCanvas: (titles, hoveredTitle) =>
     ctx = @refs.canvas.getDOMNode().getContext '2d'
     ctx.drawImage @refs.image.getDOMNode(), 0, 0
 
     titlesBBoxes = []
 
     _forEach titles, (title, i) ->
-      width = CanvasUtils.drawTitleOnCanvas ctx, title, i
+      isHovered = hoveredTitle is i
+      width = CanvasUtils.drawTitleOnCanvas ctx, title, i, isHovered
       {x, y} = title.position
 
       titlesBBoxes[i] = new BBox(x, y, width, title.font.size, title.angle)

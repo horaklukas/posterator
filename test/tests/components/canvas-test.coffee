@@ -38,6 +38,7 @@ describe 'Component Canvas', ->
       poster: {width: 80, height: 96}
       titles: @titlesData
       selectedTitle: 1
+      hoveredTitle: 0
 
     @canvas = TestUtils.renderIntoDocument React.createElement(Canvas, @props)
 
@@ -68,11 +69,14 @@ describe 'Component Canvas', ->
     @canvas.componentWillReceiveProps @props
 
     drawTitleOnCanvasCalls = @canvasUtilsMock.drawTitleOnCanvas.calls.all()
+
     expect(drawTitleOnCanvasCalls[0].args[0]).toEqual @ctx
     expect(drawTitleOnCanvasCalls[0].args[1]).toEqual @titlesData[0]
+    expect(drawTitleOnCanvasCalls[0].args[3]).toEqual true
 
     expect(drawTitleOnCanvasCalls[1].args[0]).toEqual @ctx
     expect(drawTitleOnCanvasCalls[1].args[1]).toEqual @titlesData[1]
+    expect(drawTitleOnCanvasCalls[1].args[3]).toEqual false
 
   describe 'mousedown', ->
     beforeEach ->

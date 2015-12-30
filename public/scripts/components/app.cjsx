@@ -9,6 +9,7 @@ getAppState = ->
 	poster: PosterStore.getSelectedPoster()
 	titles: PosterStore.getPosterTitles()
 	selectedTitle: EditorStore.getSelectedTitleId()
+	hoveredTitle: EditorStore.getHoveredTitleId()
 	fonts: EditorStore.getAvailableFonts()
 
 class App extends React.Component
@@ -29,11 +30,11 @@ class App extends React.Component
 		EditorStore.removeChangeListener @_onChange
 
 	render: ->
-		{poster, titles, fonts, selectedTitle, posters} = @state
+		{poster, titles, fonts, selectedTitle, hoveredTitle, posters} = @state
 		Content =
 			if poster?
 				<Editor poster={poster} titles={titles} selectedTitle={selectedTitle}
-					fonts={fonts} />
+					hoveredTitle={hoveredTitle} fonts={fonts} />
 			else
 				<PosterSelect posters={posters} />
 

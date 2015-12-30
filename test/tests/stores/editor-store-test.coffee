@@ -39,6 +39,12 @@ describe 'EditorStore', ->
     @actionHandler {type: @constants.TITLE_UNSELECT}
     expect(@editorStore.emit.calls.count()).toBe 5
 
+    @actionHandler {type: @constants.TITLE_HOVER_IN_LIST}
+    expect(@editorStore.emit.calls.count()).toBe 6
+
+    @actionHandler {type: @constants.TITLE_UNHOVER_IN_LIST}
+    expect(@editorStore.emit.calls.count()).toBe 7
+
   it 'should not emit change event for unknown actions', ->
     @actionHandler {type: @constants.UNKNOWN_ACTION, titles: []}
     expect(@editorStore.emit).not.toHaveBeenCalled()
@@ -80,11 +86,36 @@ describe 'EditorStore', ->
   it 'should clear selected title id when action TITLE_UNSELECT is invoked', ->
     @actionHandler {type: @constants.TITLE_SELECT, titleId: 4}
 
-    expect(@editorStore.selectedTitle).toBeTruthy
+    expect(@editorStore.selectedTitle).toBeTruthy()
 
     @actionHandler {type: @constants.TITLE_UNSELECT}
 
-    expect(@editorStore.selectedTitle).toBeNull
+    expect(@editorStore.selectedTitle).toBeNull()
+
+  it 'should save hovered title id when action TITLE_HOVER_IN_LIST is invoked', ->
+    expect(@editorStore.hoveredTitle).toBeFalsy()
+
+    @actionHandler {type: @constants.TITLE_HOVER_IN_LIST, titleId: 5}
+
+    expect(@editorStore.hoveredTitle).toEqual 5
+
+  it 'should clear hovered title id when action TITLE_UNHOVER_IN_LIST is invoked', ->
+    @actionHandler {type: @constants.TITLE_HOVER_IN_LIST, titleId: 6}
+
+    expect(@editorStore.hoveredTitle).toBeTruthy()
+
+    @actionHandler {type: @constants.TITLE_UNHOVER_IN_LIST}
+
+    expect(@editorStore.hoveredTitle).toBeNull()
+
+  it 'should clear hovered title id when action TITLE_SELECT is invoked', ->
+    @actionHandler {type: @constants.TITLE_HOVER_IN_LIST, titleId: 4}
+
+    expect(@editorStore.hoveredTitle).toBeTruthy()
+
+    @actionHandler {type: @constants.TITLE_SELECT, titleId: 4}
+
+    expect(@editorStore.hoveredTitle).toBeNull()
 
   describe 'method isTitleDragged', ->
     it 'should return true when passed id is equal to dragged id', ->

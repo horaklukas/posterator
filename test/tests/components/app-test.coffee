@@ -12,6 +12,7 @@ describe 'Component App', ->
       removeChangeListener: jasmine.createSpy()
       getSelectedTitleId: jasmine.createSpy()
       getAvailableFonts: jasmine.createSpy()
+      getHoveredTitleId: jasmine.createSpy()
 
     mockery.registerMock './poster-editor', mockComponent 'editorMock'
     mockery.registerMock './poster-select', mockComponent 'posterSelectMock'
@@ -59,7 +60,7 @@ describe 'Component App', ->
     select = TestUtils.scryRenderedDOMComponentsWithClass(@app, 'posterSelectMock')
     expect(select.length).toEqual 0
 
-  it 'should pass poster and its titles to editor component', ->
+  it 'should supply poster and its titles to editor component', ->
     poster = {url: './poster.png', name: 'Poster 1'}
     titles = [{'one': 1}, {'two': 2}, {'three': 3}, {'four': 4}]
 
@@ -69,8 +70,21 @@ describe 'Component App', ->
     @changeCb()
 
     editor = TestUtils.findRenderedDOMComponentWithClass @app, 'editorMock'
-
     expect(editor.props.poster).toEqual poster
     expect(editor.props.titles).toEqual titles
 
+  it 'should supply selected title to editor component', ->
+    @editorStoreMock.getSelectedTitleId.and.returnValue 2
 
+    @changeCb()
+
+    editor = TestUtils.findRenderedDOMComponentWithClass @app, 'editorMock'
+    expect(editor.props.selectedTitle).toEqual 2
+
+  it 'should supply hovered title to editor component', ->
+    @editorStoreMock.getHoveredTitleId.and.returnValue 4
+
+    @changeCb()
+
+    editor = TestUtils.findRenderedDOMComponentWithClass @app, 'editorMock'
+    expect(editor.props.hoveredTitle).toEqual 4

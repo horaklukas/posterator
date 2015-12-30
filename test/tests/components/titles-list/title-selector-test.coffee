@@ -2,7 +2,10 @@ describe 'TitlesSelector', ->
   Selector = null
 
   beforeAll ->
-    @actionsMock = selectTitle: jasmine.createSpy()
+    @actionsMock =
+      selectTitle: jasmine.createSpy()
+      hoverTitle: jasmine.createSpy()
+      unhoverTitle: jasmine.createSpy()
 
     mockery.registerMock '../../actions/editor-actions-creators', @actionsMock
 
@@ -30,3 +33,20 @@ describe 'TitlesSelector', ->
 
     expect(@actionsMock.selectTitle.calls.count()).toEqual 1
     expect(@actionsMock.selectTitle.calls.argsFor(0)).toEqual [1]
+
+  it 'should call hoverTitle action when mouse over title', ->
+    list = TestUtils.renderIntoDocument React.createElement(Selector, {label: '', id: 2})
+    title = TestUtils.findRenderedDOMComponentWithClass list, 'title'
+
+    TestUtils.Simulate.mouseOver title
+
+    expect(@actionsMock.hoverTitle.calls.count()).toEqual 1
+    expect(@actionsMock.hoverTitle.calls.argsFor(0)).toEqual [2]
+
+  it 'should call unhoverTitle action when mouse out title', ->
+    list = TestUtils.renderIntoDocument React.createElement(Selector, @prps)
+    title = TestUtils.findRenderedDOMComponentWithClass list, 'title'
+
+    TestUtils.Simulate.mouseOut title
+
+    expect(@actionsMock.unhoverTitle.calls.count()).toEqual 1

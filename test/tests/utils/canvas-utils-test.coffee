@@ -8,6 +8,7 @@ describe 'Canvas utils', ->
     beforeEach ->
       @context =
         fillText: jasmine.createSpy()
+        strokeText: jasmine.createSpy()
         measureText: jasmine.createSpy().and.returnValue width: 100
         save: jasmine.createSpy()
         restore: jasmine.createSpy()
@@ -53,6 +54,24 @@ describe 'Canvas utils', ->
         utils.drawTitleOnCanvas @context, title, 1
 
         expect(@context.font).toEqual 'italic bold 18px Arial'
+
+      it 'should set stroke color if title is hovered', ->
+        title = {font: {size: 14, family: 'Arial'}, position: {}}
+        utils.drawTitleOnCanvas @context, title, 1, true
+
+        expect(@context.strokeStyle).toEqual 'lime'
+
+      it 'should not set stroke color if title is not hovered', ->
+        title = {font: {size: 14, family: 'Arial'}, position: {}}
+        utils.drawTitleOnCanvas @context, title, 1, false
+
+        expect(@context.strokeStyle).toBeFalsy()
+
+      it 'should increase font size by 3 if title is hovered', ->
+        title = {font: {size: 18, family: 'Arial'}, position: {}}
+        utils.drawTitleOnCanvas @context, title, 1, true
+
+        expect(@context.font).toEqual '21px Arial'
 
     describe 'rotation', ->
       beforeEach ->

@@ -29,6 +29,7 @@ describe 'Component PosterEditor', ->
       poster: {width: 80, height: 96}
       titles: @titlesData
       selectedTitle: 1
+      hoveredTitle: 69
 
     @editor = TestUtils.renderIntoDocument React.createElement(Editor, @props)
     @elem = TestUtils.findRenderedDOMComponentWithClass @editor, 'editor'
@@ -71,7 +72,7 @@ describe 'Component PosterEditor', ->
     btn = TestUtils.findRenderedDOMComponentWithClass editor, 'btn'
     expect(btn.props.disabled).toEqual true
 
-  it 'should pass selected title data to toolbox', ->
+  it 'should supply selected title data to toolbox', ->
     toolbox = TestUtils.findRenderedDOMComponentWithClass @editor, 'toolboxMock'
 
     expect(toolbox.props.titleAngle).toEqual 45
@@ -79,3 +80,8 @@ describe 'Component PosterEditor', ->
     expect(toolbox.props.font).toEqual {
       size: 16, family: 'Arial', bold: true, italic: false, color: 'f0f0f0'
     }
+
+  it 'should supply hovered title data to canvas', ->
+    canvas = TestUtils.findRenderedDOMComponentWithClass @editor, 'canvasMock'
+
+    expect(canvas.props.hoveredTitle).toEqual 69

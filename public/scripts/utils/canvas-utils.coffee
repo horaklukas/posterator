@@ -1,10 +1,14 @@
 CanvasUtils =
-  drawTitleOnCanvas: (context, title, id) ->
+  drawTitleOnCanvas: (context, title, id, isHovered) ->
     {text, angle} = title
     {x, y} = title.position
     {italic, bold, size, family, color} = title.font
 
     context.save()
+
+    if isHovered
+      size += 3
+      context.strokeStyle = 'lime'
 
     fontDefinition = (if italic then 'italic ' else '') +
       (if bold then 'bold ' else '') +
@@ -12,6 +16,7 @@ CanvasUtils =
 
     context.font = fontDefinition
     context.fillStyle = color
+
 
     {width} = context.measureText(title.text)
 
@@ -29,6 +34,7 @@ CanvasUtils =
       y = 0
 
     context.fillText text, x, y + size
+    context.strokeText text, x, y + size
 
     context.restore()
 
