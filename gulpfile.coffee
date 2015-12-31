@@ -13,10 +13,7 @@ SpecReporter = require 'jasmine-spec-reporter'
 
 paths =
   cjsx:
-    src: [
-      'public/scripts/**/*.cjsx'
-      'public/scripts/**/*.coffee'
-    ]
+    src: 'public/scripts/**/*.@(coffee|cjsx)'
     dest: 'public/scripts/'
   stylus:
     src: 'public/styles/**/*.styl'
@@ -26,7 +23,7 @@ paths =
     bundle: 'posterator.js'
     dest: 'public/scripts'
   test:
-    src: 'test/tests/**/*-test.coffee'
+    src: 'test/tests/**/*-test.@(coffee|cjsx)'
     dest: 'test/tests/'
     js: 'test/tests/**/*-test.js'
 

@@ -31,7 +31,7 @@ describe 'Component PosterEditor', ->
       selectedTitle: 1
       hoveredTitle: 69
 
-    @editor = TestUtils.renderIntoDocument React.createElement(Editor, @props)
+    @editor = TestUtils.renderIntoDocument <Editor {...@props} />
     @elem = TestUtils.findRenderedDOMComponentWithClass @editor, 'editor'
     @titles = TestUtils.scryRenderedDOMComponentsWithClass @editor, 'titleMock'
 
@@ -53,13 +53,13 @@ describe 'Component PosterEditor', ->
 
   it 'should create list of available titles if no title selected', ->
     props = titles: @titlesData, selectedTitle: null, poster: @props.poster
-    editor = TestUtils.renderIntoDocument React.createElement(Editor, props)
+    editor = TestUtils.renderIntoDocument <Editor {...props} />
 
     TestUtils.findRenderedDOMComponentWithClass editor, 't-list'
 
   it 'should not create panel content if no titles available', ->
     props = titles: null, selectedTitle: null, poster: @props.poster
-    editor = TestUtils.renderIntoDocument React.createElement(Editor, props)
+    editor = TestUtils.renderIntoDocument <Editor {...props} />
     panel = TestUtils.findRenderedDOMComponentWithClass editor, 'panel'
 
     expect(panel.props.children[1]).toBeNull
@@ -67,7 +67,7 @@ describe 'Component PosterEditor', ->
 
   it 'should disable generate button when no titles available', ->
     props = titles: null, selectedTitle: null, poster: @props.poster
-    editor = TestUtils.renderIntoDocument React.createElement(Editor, props)
+    editor = TestUtils.renderIntoDocument <Editor {...props} />
 
     btn = TestUtils.findRenderedDOMComponentWithClass editor, 'btn'
     expect(btn.props.disabled).toEqual true

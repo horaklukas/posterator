@@ -10,7 +10,7 @@ describe 'Component PosterSelect', ->
         {url: 'url1', name: 'title1'}, {url: 'url2', name: 'title2'},
         {url: 'url3', name: 'title3'}
       ]
-    @sel = TestUtils.renderIntoDocument React.createElement(PosterSelect, @props)
+    @sel = TestUtils.renderIntoDocument <PosterSelect {...@props} />
 
   beforeEach ->
     @actionsMock.selectPoster.calls.reset()

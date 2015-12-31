@@ -6,7 +6,7 @@ describe 'Component FontSelector', ->
       fonts: ['Font1', 'Font2', 'Font3']
       onChange: jasmine.createSpy()
 
-    @sel = TestUtils.renderIntoDocument React.createElement(FontSelector, @props)
+    @sel = TestUtils.renderIntoDocument <FontSelector {...@props} />
 
   beforeEach ->
     @props.onChange.calls.reset()

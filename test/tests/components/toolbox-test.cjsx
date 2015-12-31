@@ -9,7 +9,7 @@ describe 'Component Toolbox', ->
     mockery.registerMock 'react-slider', mockComponent 'sliderMock'
 
     @constants = require '../../../public/scripts/constants/editor-constants'
-    @Toolbox = require "../../../public/scripts/components/toolbox/toolbox"
+    Toolbox = require "../../../public/scripts/components/toolbox/toolbox"
     @props =
       text: 'Title text 1'
       titleAngle: 35
@@ -17,7 +17,7 @@ describe 'Component Toolbox', ->
         size: 20, family: 'Verdana', bold: false, italic: false, color: '000'
       }
 
-    @tbox = TestUtils.renderIntoDocument React.createElement(@Toolbox, @props)
+    @tbox = TestUtils.renderIntoDocument <Toolbox {...@props} />
     @elem = TestUtils.findRenderedDOMComponentWithClass @tbox, 'toolbox'
 
   beforeEach ->

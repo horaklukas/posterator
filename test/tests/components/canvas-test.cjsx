@@ -40,7 +40,7 @@ describe 'Component Canvas', ->
       selectedTitle: 1
       hoveredTitle: 0
 
-    @canvas = TestUtils.renderIntoDocument React.createElement(Canvas, @props)
+    @canvas = TestUtils.renderIntoDocument <Canvas {...@props} />
 
     # fake canvas `getContext` method that is not available at used jsdom
     @ctx = drawImage: jasmine.createSpy()

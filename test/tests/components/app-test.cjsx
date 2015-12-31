@@ -26,7 +26,7 @@ describe 'Component App', ->
         {url: 'url3', name: 'title3'}
       ]
 
-    @app = TestUtils.renderIntoDocument React.createElement(App, @props)
+    @app = TestUtils.renderIntoDocument <App {...@props} />
     @changeCb = @posterStoreMock.addChangeListener.calls.mostRecent()?.args[0]
 
   afterAll ->
