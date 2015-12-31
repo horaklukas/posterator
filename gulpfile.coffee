@@ -15,6 +15,8 @@ paths =
   cjsx:
     src: 'public/scripts/**/*.@(coffee|cjsx)'
     dest: 'public/scripts/'
+  js:
+    src: 'public/scripts/**/*.js'
   stylus:
     src: 'public/styles/**/*.styl'
     main: 'public/styles/index.styl'
@@ -95,5 +97,5 @@ gulp.task 'connect', ->
 
 gulp.task 'watch', ['connect'], ->
   watch paths.cjsx.src, -> gulp.start 'cjsx'
-  watch paths.test.src, -> gulp.start 'test'
+  watch [paths.js.src, paths.test.src], -> gulp.start 'test'
   watch paths.stylus.src, -> gulp.start 'stylus'

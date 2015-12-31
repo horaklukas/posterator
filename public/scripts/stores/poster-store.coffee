@@ -19,9 +19,11 @@ class PostersStore extends Store
     {type} = payload
 
     switch type
-      when posterConstants.POSTER_SELECTED then @selected = payload.posterId
+      when posterConstants.POSTER_SELECTED
+        @selected = payload.posterId
+        @titles = @posters[@selected].titles
+
       when posterConstants.POSTERS_LOADED then @posters = payload.posters
-      when posterConstants.TITLES_LOADED then @titles = payload.titles
       when editorConstants.TITLE_MOVE
         AppDispatcher.waitFor [EditorStore.dispatcherIndex]
         titleId = EditorStore.getDraggedTitleId()

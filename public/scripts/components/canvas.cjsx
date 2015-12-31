@@ -65,6 +65,9 @@ class Canvas extends React.Component
     domEvents.off document, 'mousemove', @handleMove
     domEvents.off document, 'mouseup', @handleMouseUp
 
+  handleImageLoad: (ev) =>
+    @redrawCanvas @props.titles, @props.hoveredTitle
+
   render: ->
     {width, height, url} = @props.poster
 
@@ -78,8 +81,7 @@ class Canvas extends React.Component
         onClick={@handleCanvasClick}
         onMouseDown={@handleMouseDown}
         onMouseMove={@handleMove}
-        onMouseUp={@handleMouseUp}
-        onLoad={@handleImageLoad}>
+        onMouseUp={@handleMouseUp} >
       </canvas>
     </div>
 

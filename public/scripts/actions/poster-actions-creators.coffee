@@ -6,7 +6,5 @@ module.exports =
   selectPoster: (posterId) ->
     AppDispatcher.dispatch {type: constants.POSTER_SELECTED, posterId: posterId}
 
-    PosterUtils.loadPosterTitles(posterId)
-
   addNewTitle: ->
     AppDispatcher.dispatch {type: constants.ADD_NEW_TITLE}
