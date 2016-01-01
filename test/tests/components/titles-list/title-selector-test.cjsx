@@ -19,13 +19,13 @@ describe 'TitlesSelector', ->
     mockery.deregisterAll()
 
   it 'should display selector title', ->
-    list = TestUtils.renderIntoDocument React.createElement(Selector, @props)
+    list = TestUtils.renderIntoDocument <Selector {...@props} />
 
     title = TestUtils.findRenderedDOMComponentWithClass list, 'title'
     expect(title.getDOMNode().textContent).toEqual 'titleSelectorLabel'
 
   it 'should call selectTitle action when clicked title selector', ->
-    list = TestUtils.renderIntoDocument React.createElement(Selector, @props)
+    list = TestUtils.renderIntoDocument <Selector {...@props} />
 
     title = TestUtils.findRenderedDOMComponentWithClass list, 'title'
 
@@ -35,7 +35,7 @@ describe 'TitlesSelector', ->
     expect(@actionsMock.selectTitle.calls.argsFor(0)).toEqual [1]
 
   it 'should call hoverTitle action when mouse over title', ->
-    list = TestUtils.renderIntoDocument React.createElement(Selector, {label: '', id: 2})
+    list = TestUtils.renderIntoDocument <Selector label="" id={2} />
     title = TestUtils.findRenderedDOMComponentWithClass list, 'title'
 
     TestUtils.Simulate.mouseOver title
@@ -44,7 +44,7 @@ describe 'TitlesSelector', ->
     expect(@actionsMock.hoverTitle.calls.argsFor(0)).toEqual [2]
 
   it 'should call unhoverTitle action when mouse out title', ->
-    list = TestUtils.renderIntoDocument React.createElement(Selector, @prps)
+    list = TestUtils.renderIntoDocument <Selector {...@props} />
     title = TestUtils.findRenderedDOMComponentWithClass list, 'title'
 
     TestUtils.Simulate.mouseOut title

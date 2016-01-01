@@ -13,29 +13,38 @@ describe 'TitlesList', ->
 
   beforeEach ->
     @actionsMock.addNewTitle.calls.reset()
+    @list = TestUtils.renderIntoDocument <List {...@props} />
+
+  afterEach ->
+    React.unmountComponentAtNode React.findDOMNode(@list)
 
   afterAll ->
     mockery.deregisterAll()
 
   it 'should create list of available titles', ->
-    list = TestUtils.renderIntoDocument React.createElement(List, @props)
-
-    titles = TestUtils.scryRenderedDOMComponentsWithClass list, 'titleMock'
+    titles = TestUtils.scryRenderedDOMComponentsWithClass @list, 'titleMock'
 
     expect(titles.length).toEqual 2
     expect(titles[0].props.label).toEqual 'Title 1 bottom'
     expect(titles[1].props.label).toEqual 'Title 2 top'
 
-  it 'should create button for add new title', ->
-    editor = TestUtils.renderIntoDocument React.createElement(List, @props)
+  it 'should display message if there are no titles', ->
+    list = TestUtils.renderIntoDocument <List titles={[]} />
+    message = 'There are no existing titles for poster'
 
-    btn = TestUtils.findRenderedDOMComponentWithClass editor, 'btn'
-    expect(btn.getDOMNode().textContent).toEqual 'Add new title'
+    alert = TestUtils.findRenderedDOMComponentWithClass list, 'alert'
+    titles = TestUtils.scryRenderedDOMComponentsWithClass list, 'titleMock'
+
+    expect(React.findDOMNode(alert).textContent).toEqual message
+    expect(titles.length).toEqual 0
+
+  it 'should create button for add new title', ->
+
+    btn = TestUtils.findRenderedDOMComponentWithClass @list, 'btn'
+    expect(React.findDOMNode(btn).textContent).toEqual 'Add new title'
 
   it 'should invoke addNewTitle action when clicked button for add', ->
-    list = TestUtils.renderIntoDocument React.createElement(List, @props)
-
-    button = TestUtils.findRenderedDOMComponentWithClass list, 'btn'
+    button = TestUtils.findRenderedDOMComponentWithClass @list, 'btn'
 
     TestUtils.Simulate.click button
 
