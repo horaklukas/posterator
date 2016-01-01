@@ -25,12 +25,14 @@
       }
     ]
   },{
-    "url": "krkanka_base.png",
-    "name": "Expedice Krkaňka 2",
-    "width": 1024, "height": 768
+    "url": "floorbal.jpg",
+    "name": "Florbal",
+    "width": 1024, "height": 1024,
+    "titles": []
   },{
-    "url": "krkanka_base.png",
-    "name": "Expedice Krkaňka 3",
-    "width": 1024, "height": 768
+    "url": "kayak.jpg",
+    "name": "Kajak",
+    "width": 1300, "height": 919,
+    "titles": []
   }
 ]
