@@ -10,6 +10,7 @@ bootstrap = require 'bootstrap-styl'
 connect = require 'gulp-connect'
 watch = require 'gulp-watch'
 SpecReporter = require 'jasmine-spec-reporter'
+runSequence = require 'run-sequence'
 
 paths =
   cjsx:
@@ -29,9 +30,6 @@ paths =
     dest: 'test/tests/'
     js: 'test/tests/**/*-test.js'
 
-browserifyConfig =
-  entries: ['./public/scripts/index.js']
-  debug: true
 
 handleError = (err) ->
   gutil.log gutil.colors.red err
@@ -53,6 +51,10 @@ gulp.task 'stylus', ->
     .pipe gulp.dest(paths.stylus.dest)
     .pipe connect.reload()
 
+browserifyConfig =
+  entries: ['./public/scripts/index.js']
+  debug: true
+
 gulp.task 'build', ['cjsx'], ->
   browserify(browserifyConfig)
     .bundle()
@@ -64,30 +66,30 @@ gulp.task 'cjsx-test', ->
   .pipe cjsx({bare: true}).on 'error', handleError
   .pipe gulp.dest(paths.test.dest)
 
+specReporterConfig =
+  displayStacktrace: 'none'
+  displayFailuresSummary: true
+  displayPendingSummary: true
+  displaySuccessfulSpec: true
+  displayFailedSpec: true
+  displayPendingSpec: true
+  displaySpecDuration: false
+  displaySuiteNumber: false
+  colors:
+    pending: 'cyan'
+  prefixes:
+    pending: 'o '
+  customProcessors: []
+
+jasmineConfig =
+  reporter: new SpecReporter(specReporterConfig)
+  config:
+    spec_dir: 'test'
+    helpers: ['test-assets.js']
+
 gulp.task 'test', ['cjsx-test'], ->
   gulp.src([paths.test.js])
-  .pipe jasmine({
-    reporter: new SpecReporter({
-      displayStacktrace: 'none'
-      displayFailuresSummary: true
-      displayPendingSummary: true
-      displaySuccessfulSpec: true
-      displayFailedSpec: true
-      displayPendingSpec: true
-      displaySpecDuration: false
-      displaySuiteNumber: false
-      colors:
-        pending: 'cyan'
-      prefixes:
-        pending: 'o '
-      customProcessors: []
-    }),
-    config: {
-      spec_dir: 'test'
-      helpers: ['test-assets.js']
-    }
-
-  })
+  .pipe jasmine(jasmineConfig)
 
 gulp.task 'connect', ->
   connect.server {
@@ -96,6 +98,6 @@ gulp.task 'connect', ->
   }
 
 gulp.task 'watch', ['connect'], ->
-  watch paths.cjsx.src, -> gulp.start 'cjsx'
-  watch [paths.js.src, paths.test.src], -> gulp.start 'test'
+  watch paths.cjsx.src, -> runSequence 'cjsx', 'test'
+  watch paths.test.src, -> gulp.start 'test'
   watch paths.stylus.src, -> gulp.start 'stylus'
