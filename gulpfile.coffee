@@ -11,6 +11,7 @@ connect = require 'gulp-connect'
 watch = require 'gulp-watch'
 SpecReporter = require 'jasmine-spec-reporter'
 runSequence = require 'run-sequence'
+istanbul = require 'gulp-istanbul'
 
 paths =
   cjsx:
@@ -18,6 +19,7 @@ paths =
     dest: 'public/scripts/'
   js:
     src: 'public/scripts/**/*.js'
+    exclude: ['!./public/scripts/*.js','!./public/scripts/dispatcher/*.js']
   stylus:
     src: 'public/styles/**/*.styl'
     main: 'public/styles/index.styl'
@@ -82,13 +84,18 @@ specReporterConfig =
   customProcessors: []
 
 gulp.task 'test', ['cjsx-test'], ->
-  gulp.src(paths.test.js)
-    .pipe jasmine({
-      reporter: new SpecReporter(specReporterConfig)
-      config:
-        spec_dir: 'test'
-        helpers: ['test-assets.js']
-    })
+  gulp.src(paths.js.exclude.concat [paths.js.src])
+    .pipe istanbul({includeUntested: true}) # covering files
+    .pipe istanbul.hookRequire()
+    .on 'finish', ->
+      gulp.src(paths.test.js)
+        .pipe jasmine({
+          reporter: new SpecReporter(specReporterConfig)
+          config:
+            spec_dir: 'test'
+            helpers: ['test-assets.js']
+        })
+        .pipe istanbul.writeReports({reporters: ['html', 'text-summary']})
 
 gulp.task 'connect', ->
   connect.server {
