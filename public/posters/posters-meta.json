@@ -1,38 +1,17 @@
-[
-  {
+{
+  "bvh5f": {
     "url": "krkanka_base.png",
     "name": "Expedice Krkaňka",
-    "width": 1227, "height": 885,
-    "titles": [
-      {
-        "position": {"x": 150, "y": 170},
-        "angle": 0,
-        "text": "Krkanka",
-        "font": {
-          "size": 20, "family": "Verdana",
-          "italic": false, "bold": false,
-          "color": "#000000"
-        }
-      },{
-        "position": {"x": 160, "y": 400},
-        "angle": 0,
-        "text": "termin",
-        "font": {
-          "size": 16, "family": "Arial",
-          "italic": false, "bold": false,
-          "color": "#000000"
-        }
-      }
-    ]
-  },{
+    "width": 1227, "height": 885
+  },
+  "1lmxn": {
     "url": "floorbal.jpg",
     "name": "Florbal",
-    "width": 1024, "height": 1024,
-    "titles": []
-  },{
+    "width": 1024, "height": 1024
+  },
+  "kunb4": {
     "url": "kayak.jpg",
     "name": "Kajak",
-    "width": 1300, "height": 919,
-    "titles": []
+    "width": 1300, "height": 919
   }
-]
+}

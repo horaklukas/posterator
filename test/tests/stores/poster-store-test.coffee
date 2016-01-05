@@ -22,6 +22,7 @@ describe 'PosterStore', ->
 
   beforeEach ->
     @posterStore.posters = null
+    @posterStore.titles = null
     @dispatcherMock.waitFor.calls.reset()
     @posterStore.emit.calls.reset()
 
@@ -52,9 +53,8 @@ describe 'PosterStore', ->
     @actionHandler {type: @constants.POSTER_SELECTED, posterId: 1}
 
     expect(@posterStore.selected).toEqual 1
-    expect(@posterStore.getPosterTitles()).toEqual titlesList
 
-  xit 'should save titles list when action TITLES_LOADED is invoked', ->
+  it 'should save titles list when action TITLES_LOADED is invoked', ->
     titlesList = [{'f': 'faked'}, {'t': 'titles'}, {'l': 'list'}]
     expect(@posterStore.getPosterTitles()).toBeNull()
 

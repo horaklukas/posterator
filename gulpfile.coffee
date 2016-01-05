@@ -63,8 +63,8 @@ gulp.task 'build', ['cjsx'], ->
 
 gulp.task 'cjsx-test', ->
   gulp.src(paths.test.src)
-  .pipe cjsx({bare: true}).on 'error', handleError
-  .pipe gulp.dest(paths.test.dest)
+    .pipe cjsx({bare: true}).on 'error', handleError
+    .pipe gulp.dest(paths.test.dest)
 
 specReporterConfig =
   displayStacktrace: 'none'
@@ -81,15 +81,14 @@ specReporterConfig =
     pending: 'o '
   customProcessors: []
 
-jasmineConfig =
-  reporter: new SpecReporter(specReporterConfig)
-  config:
-    spec_dir: 'test'
-    helpers: ['test-assets.js']
-
 gulp.task 'test', ['cjsx-test'], ->
-  gulp.src([paths.test.js])
-  .pipe jasmine(jasmineConfig)
+  gulp.src(paths.test.js)
+    .pipe jasmine({
+      reporter: new SpecReporter(specReporterConfig)
+      config:
+        spec_dir: 'test'
+        helpers: ['test-assets.js']
+    })
 
 gulp.task 'connect', ->
   connect.server {
