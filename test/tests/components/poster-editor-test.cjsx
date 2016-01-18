@@ -41,11 +41,12 @@ describe 'Component PosterEditor', ->
   afterAll ->
     mockery.deregisterAll()
 
-  it 'should set panel left position to passed poster width', ->
+  it 'should set panel left position equal to passed poster width', ->
+    panel = TestUtils.findRenderedDOMComponentWithClass @elem, 'panel'
     panel = TestUtils.findRenderedDOMComponentWithClass @elem, 'panel'
     expect(panel.props.style.left).toEqual 80
 
-  it 'should set editor height equal to poster', ->
+  it 'should set editor height equal equal to poster', ->
     expect(@elem.props.style.height).toEqual 96
 
   it 'should create toolbox when selected title id exists', ->

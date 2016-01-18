@@ -1,4 +1,7 @@
 describe 'Component App', ->
+  Modal = null
+  App = null
+
   beforeAll ->
     @posterStoreMock =
       getAllPosters: jasmine.createSpy()
@@ -19,6 +22,7 @@ describe 'Component App', ->
     mockery.registerMock '../stores/poster-store', @posterStoreMock
     mockery.registerMock '../stores/editor-store', @editorStoreMock
     App = require '../../../public/scripts/components/app'
+    Modal = require 'react-bootstrap/lib/Modal'
 
     @props =
       posters: [
@@ -42,23 +46,21 @@ describe 'Component App', ->
       jasmine.any(Function)
     )
 
-  it 'should render posters list when selected poster is null', ->
+  it 'should show posters selector when selected poster is null', ->
     @posterStoreMock.getSelectedPoster.and.returnValue null
 
     @changeCb()
 
-    TestUtils.findRenderedDOMComponentWithClass @app, 'posterSelectMock'
-    editor = TestUtils.scryRenderedDOMComponentsWithClass(@app, 'editorMock')
-    expect(editor.length).toEqual 0
+    modal = TestUtils.findRenderedComponentWithType @app, Modal
+    expect(modal.props.show).toBe(true)
 
-  it 'should render poster editor when selected poster is defined', ->
+  it 'should hide poster selector when selected poster is defined', ->
     @posterStoreMock.getSelectedPoster.and.returnValue {url: './image.png', name: 'Nm'}
 
     @changeCb()
 
-    TestUtils.findRenderedDOMComponentWithClass @app, 'editorMock'
-    select = TestUtils.scryRenderedDOMComponentsWithClass(@app, 'posterSelectMock')
-    expect(select.length).toEqual 0
+    modal = TestUtils.findRenderedComponentWithType @app, Modal
+    expect(modal.props.show).toBe(false)
 
   it 'should supply poster and its titles to editor component', ->
     poster = {url: './poster.png', name: 'Poster 1'}
@@ -88,3 +90,15 @@ describe 'Component App', ->
 
     editor = TestUtils.findRenderedDOMComponentWithClass @app, 'editorMock'
     expect(editor.props.hoveredTitle).toEqual 4
+
+  it 'should use default width and height for editor if poster is falsy', ->
+    @posterStoreMock.getSelectedPoster.and.returnValue null
+
+    @changeCb()
+
+    editor = TestUtils.findRenderedDOMComponentWithClass @app, 'editorMock'
+
+    expect(editor.props.poster).toEqual {
+      width: App.DEFAULT_WIDTH
+      height: App.DEFAULT_HEIGHT
+    }
