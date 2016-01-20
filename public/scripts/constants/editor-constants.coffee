@@ -3,6 +3,8 @@ module.exports =
   TITLE_MOVE: 'title-move'
   TITLE_MOVE_STOP: 'title-move-stop'
   TITLE_SELECT: 'title-select'
+  TITLE_HOVER_IN_LIST: 'title-hover'
+  TITLE_UNHOVER_IN_LIST: 'title-unhover'
   TITLE_UNSELECT: 'title-unselect'
   TITLE_TEXT_CHANGED: 'title-text-changed'
   TITLE_FONT_CHANGED: 'title-font-changed'

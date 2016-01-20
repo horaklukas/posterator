@@ -1,10 +1,10 @@
 describe 'Component PosterEditor', ->
   Editor = null
 
-  before ->
+  beforeAll ->
     @editorStoreMock =
-      isTitleDragged: sinon.stub()
-      isTitleSelected: sinon.stub()
+      isTitleDragged: jasmine.createSpy()
+      isTitleSelected: jasmine.createSpy()
 
     mockery.registerMock './editable-title', mockComponent 'titleMock'
     mockery.registerMock './toolbox/toolbox', mockComponent 'toolboxMock'
@@ -29,53 +29,60 @@ describe 'Component PosterEditor', ->
       poster: {width: 80, height: 96}
       titles: @titlesData
       selectedTitle: 1
+      hoveredTitle: 69
 
-    @editor = TestUtils.renderIntoDocument React.createElement(Editor, @props)
+    @editor = TestUtils.renderIntoDocument <Editor {...@props} />
     @elem = TestUtils.findRenderedDOMComponentWithClass @editor, 'editor'
     @titles = TestUtils.scryRenderedDOMComponentsWithClass @editor, 'titleMock'
 
   beforeEach ->
-    @editorStoreMock.isTitleDragged.reset()
+    @editorStoreMock.isTitleDragged.calls.reset()
 
-  after ->
+  afterAll ->
     mockery.deregisterAll()
 
-  it 'should set panel left position to passed poster width', ->
+  it 'should set panel left position equal to passed poster width', ->
     panel = TestUtils.findRenderedDOMComponentWithClass @elem, 'panel'
-    expect(panel.props).to.have.deep.property 'style.left', 80
+    panel = TestUtils.findRenderedDOMComponentWithClass @elem, 'panel'
+    expect(panel.props.style.left).toEqual 80
 
-  it 'should set editor height equal to poster', ->
-    expect(@elem.props.style).to.be.an('object').and.have.property 'height', 96
+  it 'should set editor height equal equal to poster', ->
+    expect(@elem.props.style.height).toEqual 96
 
   it 'should create toolbox when selected title id exists', ->
     TestUtils.findRenderedDOMComponentWithClass @editor, 'toolboxMock'
 
   it 'should create list of available titles if no title selected', ->
     props = titles: @titlesData, selectedTitle: null, poster: @props.poster
-    editor = TestUtils.renderIntoDocument React.createElement(Editor, props)
+    editor = TestUtils.renderIntoDocument <Editor {...props} />
 
     TestUtils.findRenderedDOMComponentWithClass editor, 't-list'
 
   it 'should not create panel content if no titles available', ->
     props = titles: null, selectedTitle: null, poster: @props.poster
-    editor = TestUtils.renderIntoDocument React.createElement(Editor, props)
+    editor = TestUtils.renderIntoDocument <Editor {...props} />
     panel = TestUtils.findRenderedDOMComponentWithClass editor, 'panel'
 
-    expect(panel.props.children[1]).to.be.null
-    expect(panel.props.children[0].props.className).to.contain 'btn'
+    expect(panel.props.children[1]).toBeNull
+    expect(panel.props.children[0].props.className).toContain 'btn'
 
   it 'should disable generate button when no titles available', ->
     props = titles: null, selectedTitle: null, poster: @props.poster
-    editor = TestUtils.renderIntoDocument React.createElement(Editor, props)
+    editor = TestUtils.renderIntoDocument <Editor {...props} />
 
     btn = TestUtils.findRenderedDOMComponentWithClass editor, 'btn'
-    expect(btn.props).to.have.property 'disabled', true
+    expect(btn.props.disabled).toEqual true
 
-  it 'should pass selected title data to toolbox', ->
+  it 'should supply selected title data to toolbox', ->
     toolbox = TestUtils.findRenderedDOMComponentWithClass @editor, 'toolboxMock'
 
-    expect(toolbox.props).to.have.property 'titleAngle', 45
-    expect(toolbox.props).to.have.property 'text', 'Title 2 top'
-    expect(toolbox.props).to.have.property('font').that.eql {
+    expect(toolbox.props.titleAngle).toEqual 45
+    expect(toolbox.props.text).toEqual 'Title 2 top'
+    expect(toolbox.props.font).toEqual {
       size: 16, family: 'Arial', bold: true, italic: false, color: 'f0f0f0'
     }
+
+  it 'should supply hovered title data to canvas', ->
+    canvas = TestUtils.findRenderedDOMComponentWithClass @editor, 'canvasMock'
+
+    expect(canvas.props.hoveredTitle).toEqual 69

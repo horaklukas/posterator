@@ -24,8 +24,13 @@ class EditorStore extends Store
         }
 
       when constants.TITLE_MOVE_STOP then @dragged = {}
-      when constants.TITLE_SELECT then @selectedTitle = payload.titleId
+      when constants.TITLE_SELECT
+        @selectedTitle = payload.titleId
+        @hoveredTitle = null
+
       when constants.TITLE_UNSELECT then @selectedTitle = null
+      when constants.TITLE_HOVER_IN_LIST then @hoveredTitle = payload.titleId
+      when constants.TITLE_UNHOVER_IN_LIST then @hoveredTitle = null
       else return # dont emit change since we didnt any change
 
     @emit Store.CHANGE_EVENT
@@ -48,5 +53,8 @@ class EditorStore extends Store
 
   getSelectedTitleId: ->
     @selectedTitle
+
+  getHoveredTitleId: ->
+    @hoveredTitle
 
 module.exports = new EditorStore

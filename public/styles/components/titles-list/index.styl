@@ -1,15 +1,13 @@
 .editor .panel .titles-list
-  background-color: white
-  span
-    width: 100%
-    padding: 2% 3%
-    display: inline-block
-    box-sizing: border-box
-    border-bottom: 1px solid #777
-    cursor: pointer
+  @import './title-selector'
 
-    &:first-child
-      border-top: @border-bottom
+  .add
+    display: block
+    width: 98%
+    margin: 5px auto
+    background-color: #eee
+    border-color: darken(@background-color, 50%)
+    color: black
 
     &:hover
-      background-color: darken(@background-color, 30%)
+      background-color: darken(@background-color, 5%)

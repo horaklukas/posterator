@@ -22,6 +22,12 @@ module.exports =
   unselectTitle: (titleId) ->
     AppDispatcher.dispatch {type: constants.TITLE_UNSELECT}
 
+  hoverTitle: (titleId) ->
+    AppDispatcher.dispatch {type: constants.TITLE_HOVER_IN_LIST, titleId: titleId}
+
+  unhoverTitle: ->
+    AppDispatcher.dispatch {type: constants.TITLE_UNHOVER_IN_LIST}
+
   changeTitleText: (text) ->
     AppDispatcher.dispatch {type: constants.TITLE_TEXT_CHANGED, text: text}
 

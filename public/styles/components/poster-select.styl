@@ -1,18 +1,20 @@
+@require 'bootstrap/thumbnails'
+
+.intro-modal
+  .modal-header
+    h4
+      font-size: 1.4em
+      text-align: center
+
 .poster-select
   .thumbnail
-    float: left
-    padding: 5px
-    border: 1px solid black
-    border-radius: 5px
-    cursor: pointer
-    color: #000
-    background-color: invert(@color)
-    font-family: Arial, sans-serif
     &:hover
-      color: @background-color
-      background-color: invert(@color)
-    strong
-      display: block
+      border-color: black
+      cursor: pointer
+
+    h5
+      margin: 0
+      font-size: 1.2em
       text-align: center
     img
       size: 256px 192px
