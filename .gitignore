@@ -1,9 +1,7 @@
-coverage/
-bower_components/
-node_modules/
-*.js
-!gulpfile.js
-!test/test-assets.js
-*.log
-*.css
-.idea/
+.DS_Store
+.idea
+*.iml
+node_modules
+build
+*.log*
+npm-debug.log

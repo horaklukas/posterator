@@ -12,3 +12,9 @@ Posterator
 ### Poster backgrounds resources
 
 * [freepik](http://www.freepik.com/free-photos-vectors/abstract-background)
+
+### Project settings
+
+Based on
+
+* [redux webpack es6 boilerplate](https://github.com/nicksp/redux-webpack-es6-boilerplate)

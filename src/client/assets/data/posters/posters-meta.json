@@ -1,0 +1,17 @@
+{
+  "bvh5f": {
+    "url": "krkanka_base.png",
+    "name": "Expedice Krkaňka",
+    "width": 1227, "height": 885
+  },
+  "1lmxn": {
+    "url": "floorbal.jpg",
+    "name": "Florbal",
+    "width": 1024, "height": 1024
+  },
+  "kunb4": {
+    "url": "kayak.jpg",
+    "name": "Kajak",
+    "width": 1300, "height": 919
+  }
+}
