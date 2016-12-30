@@ -5,13 +5,9 @@ type Poster = {
   height: number;
 };
 
-type Title = {
-};
-
 export type PostersMap = { [id: string]: Poster };
 
 export type State = {
   selectedPosterId: string,
-  posters: PostersMap,
-  titles: { [id: string]: Title };
+  posters: PostersMap
 };

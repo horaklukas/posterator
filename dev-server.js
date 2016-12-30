@@ -61,7 +61,8 @@ app.get('/backend/*', (req, res) => {
         if (titles[posterId]) {
           res.json(titles[posterId]);
         } else {
-          res.send(500, 'Poster titles not found.');
+          res.json(titles);
+          //res.send(500, 'Poster titles not found.');
         }
         break;
 

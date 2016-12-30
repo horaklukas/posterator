@@ -2,17 +2,17 @@
 
 import { routerActions } from 'react-router-redux';
 
+import {createRequestUrl, fetchJSON} from 'utils/loadData';
 import {PostersMap} from 'models/posters';
 import * as constants from './postersConstants';
 
-const PHP_BACKEND_URL = '../backend/get-data.php';
-
 export function loadPosters() {
   return function (dispatch) {
-    return fetch(`${PHP_BACKEND_URL}?type=posters`)
-      .then(response => response.json())
-      .then(json => dispatch(handlePostersLoaded(json)))
-      .catch(ex => dispatch(handlePostersLoadFailed()));
+    const url = createRequestUrl({ type: 'posters' }), 
+      done = (json) => dispatch(handlePostersLoaded(json)),
+      fail = (err) => dispatch(handlePostersLoadFailed());
+
+    return fetchJSON(url, done, fail);
   };
 }
 
@@ -38,41 +38,11 @@ function selectPoster (posterId: string) {
       posterId: posterId
     });
 
-    dispatch(routerActions.push(`/edit/${posterId}`))  
-
-    return loadPosterTitles(posterId, dispatch);
-  };
-}
-
-function loadPosterTitles(posterId, dispatch) {
-  return fetch(`${PHP_BACKEND_URL}?type=titles&poster=${posterId}`)
-    .then(response => response.json())
-    .then(json => dispatch(handleTitlesLoaded(json)))
-    .catch(ex => dispatch(handleTitlesLoadFailed()));
-}
-
-function handleTitlesLoaded(titles) {
-  return {
-    type: constants.TITLES_LOADED, 
-    titles: titles
-  };
-}
-
-function handleTitlesLoadFailed() {
-  return {
-    type: constants.TITLES_LOAD_FAILED,
-    message: 'Loading titles failed'
-  };
-}
-
-function addNewTitle() {
-  return {
-    type: constants.ADD_NEW_TITLE
+    return dispatch(routerActions.push(`/edit/${posterId}`))  
   };
 }
 
 export const actionCreators = {
   selectPoster,
-  addNewTitle,
   loadPosters
 };

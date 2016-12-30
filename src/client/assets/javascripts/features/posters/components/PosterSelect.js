@@ -11,7 +11,7 @@ export const PosterSelect = (props) => {
     <div className="poster-select">
       <Grid fluid>
         <Row>
-          { PostersList(props.data.posters, props.actions.selectPoster) }
+          { PostersList(props.posters.posters, props.actions.selectPoster) }
         </Row>
       </Grid>
     </div>

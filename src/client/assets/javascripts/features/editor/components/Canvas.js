@@ -9,7 +9,8 @@ import BBox from '../utils/bbox'
 
 export default class Canvas extends Component {
   static propTypes = {
-    poster: PropTypes.shape({
+    url: PropTypes.string,
+    size: PropTypes.shape({
       width: PropTypes.number, 
       height: PropTypes.number
     })
@@ -18,6 +19,8 @@ export default class Canvas extends Component {
   constructor(props) {
     super(props);
     
+    this.ctx = null;
+    this.image = null;
     this.state = {
       titlesBBoxes: []
     };
@@ -28,14 +31,13 @@ export default class Canvas extends Component {
   }
 
   redrawCanvas(titles, hoveredTitle) {
-    let ctx = this.refs.canvas.getDOMNode().getContext('2d'),
-      titlesBBoxes = [];
+    let titlesBBoxes = [];
 
-    ctx.drawImage(this.refs.image.getDOMNode(), 0, 0);
+    this.ctx.drawImage(this.image, 0, 0);
 
     titles.forEach(function(title, i) {
       let isHovered = hoveredTitle === i,
-        width = CanvasUtils.drawTitleOnCanvas(ctx, title, i, isHovered),
+        width = CanvasUtils.drawTitleOnCanvas(this.ctx, title, i, isHovered),
         {x, y} = title.position;
 
       titlesBBoxes[i] = new BBox(x, y, width, title.font.size, title.angle);
@@ -102,12 +104,13 @@ export default class Canvas extends Component {
     //domEvents.off(document, 'mouseup', this.handleMouseUp);
   }
 
-  handleImageLoad(ev) {
+  handleImageLoad() {
     this.redrawCanvas(this.props.titles, this.props.hoveredTitle);
   }
 
   render() {
-    let {width, height, url} = this.props.poster,
+    let {url, size} = this.props,
+      {width, height} = size,
       canvasClasses = classNames({
         'canvas': true,
         //'dragging-title': !!EditorStore.getDraggedTitleId()
@@ -115,9 +118,11 @@ export default class Canvas extends Component {
   
     return (
       <div className={canvasClasses}>
-        <img src={url} ref="image" width={width} height={height}
-          onLoad={this.handleImageLoad} />
-        <canvas id="result-poster" ref="canvas" width={width} height={height}
+        <img src={url} width={width} height={height}
+          ref={(image) => { this.image = image; }}
+          onLoad={() => this.handleImageLoad()} />
+        <canvas id="result-poster" width={width} height={height}
+          ref={(canvas) => { this.ctx = canvas && canvas.getContext('2d'); }}
           onClick={this.handleCanvasClick}
           onMouseDown={this.handleMouseDown}
           onMouseMove={this.handleMove}

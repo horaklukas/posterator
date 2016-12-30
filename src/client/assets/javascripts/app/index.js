@@ -10,7 +10,7 @@ import configureStore from './store/configureStore';
 
 import * as editorUtils from '../utils/editorUtils';
 import * as posters from 'features/posters';
-//constants = require './constants/editor-constants'
+import * as editor from 'features/editor';
 
 import 'styles/bootstrap.min.css';
 import 'styles/index.styl';
@@ -59,7 +59,8 @@ if (module.hot) {
 }
 
 store.dispatch(posters.actionCreators.loadPosters());
-editorUtils.loadFonts()
+//store.dispatch(editor.actionCreators.loadTitles());
+store.dispatch(editor.actionCreators.loadFonts());
 
 //AppDispatcher.register ({type}) ->
   //if type is constants.GENERATE_POSTER then EditorUtils.generatePoster()
